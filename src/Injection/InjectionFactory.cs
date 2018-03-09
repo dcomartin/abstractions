@@ -46,6 +46,11 @@ namespace Unity.Injection
 
         #region IInjectionFactory
 
+        public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
+        {
+            policies.Set(typeof(IInjectionFactory), _factoryFunc);
+        }
+
         /// <summary>
         /// Add policies to the <paramref name="policies"/> to configure the
         /// container to call this constructor with the appropriate parameter values.
