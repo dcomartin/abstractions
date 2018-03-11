@@ -15,7 +15,7 @@ namespace Unity.Injection
     /// </summary>
     public class ResolvedParameter : TypedInjectionValue
     {
-        private readonly string _name;
+        public string ParameterName { get; }
 
         /// <summary>
         /// Construct a new <see cref="ResolvedParameter"/> that
@@ -36,7 +36,7 @@ namespace Unity.Injection
         public ResolvedParameter(Type parameterType, string name)
             : base(parameterType, null)
         {
-            _name = name;
+            ParameterName = name;
         }
 
         /// <summary>
@@ -52,17 +52,17 @@ namespace Unity.Injection
             if (ParameterType.IsArray && ParameterType.GetElementType().GetTypeInfo().IsGenericParameter)
             {
                 Type arrayType = ParameterType.GetClosedParameterType(typeToBuild.GetTypeInfo().GenericTypeArguments);
-                return new NamedTypeDependencyResolverPolicy(arrayType, _name);
+                return new NamedTypeDependencyResolverPolicy(arrayType, ParameterName);
             }
 
             var info = ParameterType.GetTypeInfo();
             if (info.IsGenericType && info.ContainsGenericParameters || ParameterType.IsGenericParameter)
             {
                 return new NamedTypeDependencyResolverPolicy(
-                    ParameterType.GetClosedParameterType(typeToBuild.GetTypeInfo().GenericTypeArguments), _name);
+                    ParameterType.GetClosedParameterType(typeToBuild.GetTypeInfo().GenericTypeArguments), ParameterName);
             }
 
-            return new NamedTypeDependencyResolverPolicy(ParameterType, _name);
+            return new NamedTypeDependencyResolverPolicy(ParameterType, ParameterName);
         }
     }
 

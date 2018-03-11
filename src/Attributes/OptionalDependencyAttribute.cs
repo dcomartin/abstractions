@@ -33,11 +33,6 @@ namespace Unity.Attributes
         }
 
         /// <summary>
-        /// Name of the dependency.
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
         /// Create an instance of <see cref="IResolverPolicy"/> that
         /// will be used to get the value for the member this attribute is
         /// applied to.

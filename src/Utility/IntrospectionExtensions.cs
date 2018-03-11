@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Unity.Attributes;
 
 namespace System.Reflection
 {
@@ -190,6 +192,13 @@ namespace System.Reflection
     internal static class IntrospectionExtensions
     {
 #if NET40
+        public static Attribute GetCustomAttribute(this ParameterInfo parameter, Type type)
+        {
+            return parameter.GetCustomAttributes(false)
+                            .OfType<DependencyResolutionAttribute>()
+                            .FirstOrDefault();
+        }
+
         public static TypeInfo GetTypeInfo(this Type type)
         {
             if (type == null)

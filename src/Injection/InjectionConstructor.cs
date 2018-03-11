@@ -6,8 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Unity.Attributes;
-using Unity.Builder;
 using Unity.Builder.Policy;
+using Unity.Builder.Selection;
 using Unity.Policy;
 using Unity.Registration;
 using Unity.Utility;
@@ -54,6 +54,9 @@ namespace Unity.Injection
                 .Select(InjectionParameterValue.ToParameter)
                 .ToArray();
         }
+
+
+        #region Legacy
 
         /// <summary>
         /// Add policies to the <paramref name="policies"/> to configure the
@@ -139,5 +142,91 @@ namespace Unity.Injection
                                                                            .OfType<DependencyAttribute>()
                                                                            .FirstOrDefault()?.Name);
         }
+
+        #endregion
+
+
+        #region Pipeline
+
+        public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
+        {
+            var pipeline = null != _data  ? SelectByArgumentsConstructorPipeline(implementationType) :
+                                            SelecByTypeConstructorPipeline(implementationType);
+
+            policies.Set(typeof(SelectConstructorPipeline), pipeline);
+        }
+
+        private SelectConstructorPipeline SelecByTypeConstructorPipeline(Type type)
+        {
+            foreach (var ctor in type.GetTypeInfo().DeclaredConstructors)
+            {
+                if (ctor.IsStatic || !ctor.IsPublic || !Matches(_types, ctor.GetParameters()))
+                    continue;
+
+                var constructor = new SelectedConstructor(ctor);
+                return (IUnityContainer c, Type t, string n) => constructor;
+            }
+
+            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Constants.NoSuchConstructor,
+                                                type.FullName, string.Join(", ", _types.Select(t => t.Name))));
+        }
+
+        private SelectConstructorPipeline SelectByArgumentsConstructorPipeline(Type type)
+        {
+            foreach (var ctor in type.GetTypeInfo().DeclaredConstructors)
+            {
+                if (ctor.IsStatic || !ctor.IsPublic || 
+                    !Matches(_data.Cast<TypedInjectionValue>()
+                                  .Select(d => d.ParameterType), 
+                             ctor.GetParameters()))
+                    continue;
+
+                var constructor = new SelectedConstructor(ctor, _data);
+                return (IUnityContainer c, Type t, string n) => constructor;
+            }
+
+            string signature = string.Join(", ", _data.Select(p => p.ParameterTypeName).ToArray());
+            throw new InvalidOperationException( string.Format(CultureInfo.CurrentCulture,
+                    Constants.NoSuchConstructor, type.FullName, signature));
+        }
+
+        #endregion
+
+
+        #region Implementation
+
+        private static bool Matches(IEnumerable<Type> types, IEnumerable<ParameterInfo> parameters)
+        {
+            if (null == types) return false;
+
+            var enumerator1 = types.GetEnumerator();
+            var enumerator2 = parameters.GetEnumerator();
+            bool status1 = false;
+            bool status2 = false;
+
+            while ((status1 = enumerator1.MoveNext()) == (status2 = enumerator2.MoveNext()) && status1 && status2)
+            {
+                if (enumerator1.Current != enumerator2.Current.ParameterType)
+                {
+                    var info1 = enumerator1.Current.GetTypeInfo();
+                    var info2 = enumerator2.Current.ParameterType.GetTypeInfo();
+
+                    if ((info1.IsArray || enumerator1.Current == typeof(Array)) &&
+                        (info2.IsArray || enumerator2.Current.ParameterType == typeof(Array)))
+                        continue;
+
+                    if (info1.IsGenericType && info2.IsGenericType &&
+                        info1.GetGenericTypeDefinition() == info2.GetGenericTypeDefinition())
+                        continue;
+
+
+                    return false;
+                }
+            }
+
+            return status1 == status2;
+        }
+
+        #endregion
     }
 }

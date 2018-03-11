@@ -13,6 +13,11 @@ namespace Unity.Attributes
     public abstract class DependencyResolutionAttribute : Attribute
     {
         /// <summary>
+        /// The name specified in the constructor.
+        /// </summary>
+        public string Name { get; protected set; }
+
+        /// <summary>
         /// Create an instance of <see cref="IResolverPolicy"/> that
         /// will be used to get the value for the member this attribute is
         /// applied to.

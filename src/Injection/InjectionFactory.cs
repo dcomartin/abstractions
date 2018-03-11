@@ -12,13 +12,6 @@ namespace Unity.Injection
     /// <remarks>This factory allow using predefined <code>Func&lt;IUnityContainer, Type, string, object&gt;</code> to create types.</remarks>
     public class InjectionFactory : InjectionMember, IInjectionFactory, IBuildPlanPolicy
     {
-        #region Fields
-
-        private readonly Func<IUnityContainer, Type, string, object> _factoryFunc;
-
-        #endregion
-
-
         #region Constructors
 
         /// <summary>
@@ -38,17 +31,20 @@ namespace Unity.Injection
         /// <param name="factoryFunc">Factory function.</param>
         public InjectionFactory(Func<IUnityContainer, Type, string, object> factoryFunc)
         {
-            _factoryFunc = factoryFunc ?? throw new ArgumentNullException(nameof(factoryFunc));
+            Factory = factoryFunc ?? throw new ArgumentNullException(nameof(factoryFunc));
         }
 
         #endregion
+
+
+        public Func<IUnityContainer, Type, string, object> Factory { get; }
 
 
         #region IInjectionFactory
 
         public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
         {
-            policies.Set(typeof(IInjectionFactory), _factoryFunc);
+            policies.Set(typeof(IInjectionFactory), Factory);
         }
 
         /// <summary>
@@ -74,7 +70,7 @@ namespace Unity.Injection
         {
             if ((context ?? throw new ArgumentNullException(nameof(context))).Existing == null)
             {
-                context.Existing = _factoryFunc(context.Container, context.BuildKey.Type, context.BuildKey.Name);
+                context.Existing = Factory(context.Container, context.BuildKey.Type, context.BuildKey.Name);
                 context.SetPerBuildSingleton();
             }
         }

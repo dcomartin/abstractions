@@ -184,12 +184,13 @@ namespace Unity.Utility
         /// <returns>true if they match, false if they don't.</returns>
         public static bool Matches(this IEnumerable<InjectionParameterValue> parametersToMatch, IEnumerable<Type> candidate)
         {
-            var toMatch = parametersToMatch.ToArray();
-            var candidateTypes = candidate.ToArray();
+            // TODO: Performance could be optimized
+            var toMatch = parametersToMatch.ToList();
+            var candidateTypes = candidate.ToList();
 
-            if (toMatch.Length != candidateTypes.Length) return false;
-
-            return !toMatch.Where((t, i) => !t.MatchesType(candidateTypes[i])).Any();
+            if (toMatch.Count != candidateTypes.Count) return false;
+            
+            return !toMatch.Where((t, i) => !t.MatchesType(candidateTypes[i])).Any(); 
         }
     }
 }
