@@ -1,5 +1,4 @@
-﻿
-using Unity.Registration;
+﻿using Unity.Registration;
 
 namespace Unity.Builder.Strategy
 {

@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Reflection;
 using Unity.Attributes;
-using Unity.Injection;
+using Unity.Registration;
 using Unity.Resolution;
 
-namespace Unity.Builder.Selection
+namespace Unity.Dependency
 {
     /// <summary>
     /// Objects of this type are the return value from 
@@ -36,7 +36,7 @@ namespace Unity.Builder.Selection
         /// contains the given constructor.
         /// </summary>
         /// <param name="constructor">The constructor to wrap.</param>
-        public SelectedConstructor(ConstructorInfo constructor, InjectionParameterValue[] values)
+        public SelectedConstructor(ConstructorInfo constructor, InjectionParameter[] values)
             : base(constructor)
         {
             var parameters = constructor.GetParameters();
@@ -47,13 +47,13 @@ namespace Unity.Builder.Selection
                 switch (values[i])
                 {
                     case InjectionParameter injectionParameter:
-                        AddParameterResolver((ref ResolutionContext context) => injectionParameter.Value);
+//                        AddParameterResolver((ref ResolutionContext context) => injectionParameter.Value);
                         break;
 
-                    case ResolvedParameter resolvedParameter:
-                        AddParameterResolver((ref ResolutionContext context) => context.Resolve(resolvedParameter.ParameterType, 
-                                                                                                resolvedParameter.ParameterName));
-                        break;
+                    //case ResolvedParameter resolvedParameter:
+                    //    //AddParameterResolver((ref ResolutionContext context) => context.Resolve(resolvedParameter.ParameterType, 
+                    //    //                                                                        resolvedParameter.ParameterName));
+                    //    break;
 
                     default:
                         AddParameterResolver(GetResolvePipeline(constructor, parameters[i]));

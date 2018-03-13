@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Policy;
 
-namespace Unity.Builder.Selection
+namespace Unity.Dependency
 {
     /// <summary>
     /// Base class for return of selector policies that need

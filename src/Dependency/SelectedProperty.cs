@@ -1,9 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved. See License.txt in the project root for license information.
-
-using System.Reflection;
+﻿using System.Reflection;
 using Unity.Policy;
 
-namespace Unity.Builder.Selection
+namespace Unity.Dependency
 {
     /// <summary>
     /// Objects of this type are returned from

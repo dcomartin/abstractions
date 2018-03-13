@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Unity.Builder.Selection;
-using Unity.Injection;
+using Unity.Dependency;
 using Unity.Policy;
+using Unity.Registration;
 
 namespace Unity.Builder.Policy
 {

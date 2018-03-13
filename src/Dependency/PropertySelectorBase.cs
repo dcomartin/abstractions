@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.Builder;
 using Unity.Policy;
 using Unity.Utility;
 
-namespace Unity.Builder.Selection
+namespace Unity.Dependency
 {
     /// <summary>
     /// Base class that provides an implementation of <see cref="IPropertySelectorPolicy"/>

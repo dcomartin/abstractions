@@ -1,9 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using Unity.Builder;
-using Unity.Injection;
 using Unity.Policy;
+using Unity.Registration;
 
 namespace Unity.Resolution
 {
@@ -17,8 +15,9 @@ namespace Unity.Resolution
 
         protected ResolverOverride(string name, object value)
         {
-            Name = name;
-            Value = null == value ? null : InjectionParameterValue.ToParameter(value);
+            throw new NotImplementedException(); // TODO: Add implementation
+            //Name = name;
+            //Value = null == value ? null : InjectionParameterValue.ToParameter(value);
         }
 
         public virtual string Name { get; }
@@ -60,7 +59,7 @@ namespace Unity.Resolution
 
         public override int GetHashCode()
         {
-            return ((Value?.Value?.GetHashCode() ?? 0 * 37) + (Name?.GetHashCode() ?? 0 * 17)) ^  GetType().GetHashCode();
+            return ((Value?.ParameterValue?.GetHashCode() ?? 0 * 37) + (Name?.GetHashCode() ?? 0 * 17)) ^  GetType().GetHashCode();
 
         }
 
