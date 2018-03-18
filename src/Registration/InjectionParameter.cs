@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
-using Unity.Factory;
+using Unity.Build.Context;
+using Unity.Build.Pipeline;
+using Unity.Pipeline;
 using Unity.Policy;
 
 namespace Unity.Registration
@@ -9,10 +12,9 @@ namespace Unity.Registration
     /// A class that holds on to the given Parameter's value or info and provides
     /// the required resolver when the declaring type is instantiated.
     /// </summary>
-    public class InjectionParameter : IResolvePipelineFactory
+    [DebuggerDisplay("InjectionParameter:  Type={ParameterType?.Name},  Value={ParameterValue}")]
+    public class InjectionParameter : ICreateResolver<ParameterInfo>
     {
-        private bool _hasValue = false;
-
         #region Constructors
 
         /// <summary>
@@ -24,6 +26,7 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = type;
+            CreateResolver = (ParameterInfo info) => (ref ResolutionContext context) => type;
         }
 
         /// <summary>
@@ -34,9 +37,9 @@ namespace Unity.Registration
         /// <param name="value">Value to be injected for this parameter.</param>
         public InjectionParameter(object value)
         {
-            ParameterValue = value ?? throw new ArgumentNullException(nameof(value));
-            ParameterType = value is Type ? typeof(Type) : value.GetType();
-            _hasValue = true;
+            ParameterValue = value;
+            ParameterType = value is Type ? typeof(Type) : value?.GetType();
+            CreateResolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
         }
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = value ?? throw new ArgumentNullException(nameof(value));
-            _hasValue = true;
+            CreateResolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
         }
 
         #endregion
@@ -67,6 +70,8 @@ namespace Unity.Registration
         /// </summary>
         public virtual object ParameterValue { get; }
 
+        public CreateResolver<ParameterInfo> CreateResolver { get; protected set; }
+
         /// <summary>
         /// Test if this parameter matches type.
         /// </summary>
@@ -74,6 +79,8 @@ namespace Unity.Registration
         /// <returns>True if this parameter value is compatible with type <paramref name="type"/></returns>
         public virtual bool MatchesType(Type type)
         {
+            if (null == ParameterType) return true;
+
             var thisInfo = (typeof(Type).Equals(ParameterType) ? ((Type)ParameterValue) 
                                                             : ParameterType).GetTypeInfo();
             var typeInfo = type.GetTypeInfo();
@@ -89,18 +96,11 @@ namespace Unity.Registration
                 thisInfo.GetGenericTypeDefinition() == typeInfo.GetGenericTypeDefinition())
                 return true;
 
-            if (ParameterType is Type && ParameterValue == type)
+            if (ParameterType == typeof(Type) && (Type)ParameterValue == type)
                 return true;
 
             return false;
         }
-
-        #endregion
-
-
-        #region IResolvePipelineFactory
-
-        public virtual ResolvePipelineFactory GetResolver => throw new NotImplementedException();
 
         #endregion
 

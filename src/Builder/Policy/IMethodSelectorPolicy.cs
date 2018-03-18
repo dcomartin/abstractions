@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Build.Selected;
 using Unity.Builder;
 using Unity.Dependency;
 

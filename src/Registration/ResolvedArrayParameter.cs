@@ -16,7 +16,8 @@ namespace Unity.Registration
     /// </summary>
     public class ResolvedArrayParameter : TypedInjectionValue
     {
-        private readonly Type _elementType;
+        // TODO:
+        //private readonly Type _elementType;
         private readonly List<InjectionParameterValue> _elementValues = new List<InjectionParameterValue>();
 
         /// <summary>
@@ -68,13 +69,15 @@ namespace Unity.Registration
         /// <returns>The <see cref="IResolverPolicy"/>.</returns>
         public override IResolverPolicy GetResolverPolicy(Type typeToBuild)
         {
-            var elementType = !_elementType.IsArray ? _elementType 
-                : _elementType.GetArrayParameterType(typeToBuild.GetTypeInfo().GenericTypeArguments);
+            // TODO:
+            throw new NotImplementedException();
+            //var elementType = !_elementType.IsArray ? _elementType 
+            //    : _elementType.GetArrayParameterType(typeToBuild.GetTypeInfo().GenericTypeArguments);
 
-            var elementPolicies = _elementValues.Select(pv => pv.GetResolverPolicy(typeToBuild))
-                                                .ToArray();
+            //var elementPolicies = _elementValues.Select(pv => pv.GetResolverPolicy(typeToBuild))
+            //                                    .ToArray();
 
-            return new ResolvedArrayWithElementsResolverPolicy(elementType, elementPolicies);
+            //return new ResolvedArrayWithElementsResolverPolicy(elementType, elementPolicies);
         }
     }
 

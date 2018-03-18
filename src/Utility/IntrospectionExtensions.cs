@@ -34,6 +34,8 @@ namespace System.Reflection
 
         public Type AsType() => _type;
 
+        public bool IsArray => _type.IsArray;
+
         public bool IsAssignableFrom(TypeInfo typeInfo) => _type.IsAssignableFrom(typeInfo.AsType());
 
         public bool IsGenericParameter => _type.IsGenericParameter;
@@ -47,6 +49,8 @@ namespace System.Reflection
         public bool IsValueType => _type.IsValueType;
 
         public bool ContainsGenericParameters => _type.ContainsGenericParameters;
+
+        public int GenericParameterPosition => _type.GenericParameterPosition;
 
     #region moved over from Type
 
@@ -185,6 +189,15 @@ namespace System.Reflection
             return left?.GetHashCode() != right?.GetHashCode();
         }
 
+        public Type GetGenericTypeDefinition()
+        {
+            return _type.GetGenericTypeDefinition();
+        }
+
+        public Type MakeGenericType(Type[] types)
+        {
+            return _type.MakeGenericType(types);
+        }
     }
 #endif
 

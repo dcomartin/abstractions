@@ -16,7 +16,10 @@ namespace Unity.Registration
     public class InjectionProperty : InjectionMember
     {
         private readonly string _propertyName;
+        // TODO:
+#pragma warning disable 649
         private InjectionParameterValue _parameterValue;
+#pragma warning restore 649
 
         /// <summary>
         /// Configure the container to inject the given property name,

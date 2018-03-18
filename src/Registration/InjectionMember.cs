@@ -44,5 +44,6 @@ namespace Unity.Registration
         /// it requires differen constructor so it should be built instead.
         /// </remarks>
         public virtual bool BuildRequired { get; }
+
     }
 }

@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Unity.Builder;
+using Unity.Dependency;
 using Unity.Policy;
 using Unity.Utility;
 
-namespace Unity.Dependency
+namespace Unity.Build.Selected
 {
     /// <summary>
     /// Base class that provides an implementation of <see cref="IPropertySelectorPolicy"/>

@@ -36,6 +36,7 @@ namespace Unity
         public const string NoMatchingGenericArgument = "The type {0} does not have a generic argument named '{1}'";
         public const string NoOperationExceptionReason = "while resolving";
         public const string NoSuchConstructor = "The type {0} does not have a constructor that takes the parameters ({1}).";
+        public const string MoreThanOneConstructor = "The type {0} has multiple constructors able to accept parameters ( {1} ). Unable to disambiguate.";
         public const string NoSuchMethod = "The type {0} does not have a public method named {1} that takes the parameters ({2}).";
         public const string NoSuchProperty = "The type {0} does not contain an instance property named {1}.";
         public const string NotAGenericType = "The type {0} is not a generic type, and you are attempting to inject a generic parameter named '{1}'.";

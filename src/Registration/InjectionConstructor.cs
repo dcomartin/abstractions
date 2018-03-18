@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
 using System.Reflection;
+using Unity.Build.Pipeline;
+using Unity.Build.Selected;
 using Unity.Dependency;
+using Unity.Pipeline;
 using Unity.Policy;
 
 namespace Unity.Registration
@@ -14,27 +15,14 @@ namespace Unity.Registration
     /// </summary>
     public class InjectionConstructor : InjectionMemberWithParameters
     {
+        #region Constructors
+
         /// <summary>
         /// Create a new instance of <see cref="InjectionConstructor"/> that looks
         /// for a default constructor.
         /// </summary>
-        public InjectionConstructor()
-            : base(0)
+        public InjectionConstructor() : base()
         {
-        }
-
-        /// <summary>
-        /// Create a new instance of <see cref="InjectionConstructor"/> that looks
-        /// for a constructor with the given set of parameter types.
-        /// </summary>
-        /// <param name="types">The types of the parameters of the constructor.</param>
-        public InjectionConstructor(params Type[] types)
-            : base((types ?? throw new ArgumentNullException(nameof(types))).Length)
-        {
-            for (var i = 0; i < types.Length; i++)
-            {
-                Parameters[i] = new InjectionParameter(types[i]);
-            }
         }
 
         /// <summary>
@@ -44,47 +32,46 @@ namespace Unity.Registration
         /// <param name="values">The values for the parameters, that will
         /// be converted to <see cref="InjectionParameterValue"/> objects.</param>
         public InjectionConstructor(params object[] values)
-            : base((values ?? throw new ArgumentNullException(nameof(values))).Length)
+            : base(values)
         {
-            for (var i = 0; i < values.Length; i++)
-            {
-                var value = values[i];
-                Parameters[i] = value is InjectionParameter parameter 
-                               ?  parameter :
-                               new InjectionParameter(value);
-            }
         }
-
-
-        #region Legacy
-
-        public override bool BuildRequired => true;
 
         #endregion
 
 
-        #region Pipeline
+        #region Register Pipeline
 
         public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
         {
             var type = implementationType ?? registeredType;
+            SelectedConstructor constructor = null;
 
             foreach (var ctor in type.GetTypeInfo().DeclaredConstructors)
             {
                 if (ctor.IsStatic || !ctor.IsPublic || !Matches(ctor.GetParameters()))
                     continue;
 
-                var constructor = new SelectedConstructor(ctor, Parameters);
-                SelectConstructorPipeline pipeline = (IUnityContainer c, Type t, string n) => constructor;
-                policies.Set(typeof(SelectConstructorPipeline), pipeline);
-                return;
+                if (null != constructor)
+                    throw new InvalidOperationException(MoreThanOneConstructor(type, constructor, ctor));
+
+                constructor = 0 == Parameters.Length 
+                            ? new SelectedConstructor(ctor)
+                            : new SelectedConstructor(ctor, Parameters);
             }
 
-            string signature = string.Join(", ", Parameters.Select(p => p.ParameterType?.Name).ToArray());
-            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
-                    Constants.NoSuchConstructor, type.FullName, signature));
+            if (null == constructor)
+                throw new InvalidOperationException(ErrorMessage(type, Constants.NoSuchConstructor));
+
+            SelectConstructor pipeline = (Type t) => constructor;
+            policies.Set(typeof(SelectConstructor), pipeline);
         }
 
         #endregion
+
+
+        private string MoreThanOneConstructor(Type type, SelectedConstructor constructor, ConstructorInfo ctor)
+        {
+            return ErrorMessage(type, $"The type {{0}} has multiple constructors {constructor.Constructor}, {ctor}, etc. satisfying signature ( {{1}} ). Unable to disambiguate.");
+        }
     }
 }

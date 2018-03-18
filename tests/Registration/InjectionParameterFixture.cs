@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Unity.Dependency;
 using Unity.Registration;
 
 namespace Unity.Abstractions.Tests.Registration
@@ -8,6 +9,8 @@ namespace Unity.Abstractions.Tests.Registration
     [TestClass]
     public class InjectionParameterFixture
     {
+        #region Setup
+
         public static IEnumerable<object[]> TestMethodInputSuccess
         {
             get
@@ -41,18 +44,48 @@ namespace Unity.Abstractions.Tests.Registration
             }
         }
 
+        #endregion
+
         [DataTestMethod]
         [DynamicData(nameof(TestMethodInputSuccess))]
-        public void Abstractions_Registration_InjectionParameter_success(object injector, Type type)
+        public void Abstractions_Registration_InjectionParameter(object match, Type type)
         {
-            Assert.IsTrue(new InjectionParameter(injector).MatchesType(type));
+            Assert.IsTrue(new InjectionParameter(match).MatchesType(type));
         }
 
         [DataTestMethod]
         [DynamicData(nameof(TestMethodInputFail))]
-        public void Abstractions_Registration_InjectionParameter_fail(object injector, Type type)
+        public void Abstractions_Registration_InjectionParameter_fail(object match, Type type)
         {
-            Assert.IsFalse(new InjectionParameter(injector).MatchesType(type));
+            Assert.IsFalse(new InjectionParameter(match).MatchesType(type));
         }
+
+        [DataTestMethod]
+        [DynamicData(nameof(TestMethodInputSuccess))]
+        public void Abstractions_Registration_InjectionParameter_TypeMatching(object match, Type type)
+        {
+            Assert.IsTrue(new TestMember().Match(match, type));
+        }
+
+        [DataTestMethod]
+        [DynamicData(nameof(TestMethodInputFail))]
+        public void Abstractions_Registration_InjectionParameter_TypeMatching_fail(object match, Type type)
+        {
+            Assert.IsFalse(new TestMember().Match(match, type));
+        }
+
+        #region Test Data
+
+        private class TestMember : InjectionMemberWithParameters
+        {
+            public TestMember(params object[] args)
+                : base(args)
+            {
+            }
+
+            public bool Match(object obj, Type type) => Matches(obj, type);
+        }
+
+        #endregion
     }
 }

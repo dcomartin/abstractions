@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.Build.Selected;
 using Unity.Dependency;
 using Unity.Policy;
 using Unity.Registration;
@@ -74,11 +75,12 @@ namespace Unity.Builder.Policy
             IEnumerable<InjectionParameterValue> parameterValues,
             SelectedMemberWithParameters result)
         {
-            foreach (InjectionParameterValue parameterValue in parameterValues)
-            {
-                var resolver = parameterValue.GetResolverPolicy(typeToBuild);
-                result.AddParameterResolver(resolver);
-            }
+            // TODO:
+            //foreach (InjectionParameterValue parameterValue in parameterValues)
+            //{
+            //    var resolver = parameterValue.GetResolverPolicy(typeToBuild);
+            //    result.AddParameterResolver(resolver);
+            //}
         }
 
     }

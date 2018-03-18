@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Unity.Dependency
+namespace Unity.Build.Selected
 {
     /// <summary>
     /// Objects of this type are the return value from <see cref="IMethodSelectorPolicy.SelectMethods"/>.
@@ -16,7 +16,7 @@ namespace Unity.Dependency
         /// </summary>
         /// <param name="method">The method</param>
         public SelectedMethod(MethodInfo method)
-            : base(method)
+            : base(method, null)             // TODO:
         {
         }
 

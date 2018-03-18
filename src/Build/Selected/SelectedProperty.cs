@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Unity.Policy;
 
-namespace Unity.Dependency
+namespace Unity.Build.Selected
 {
     /// <summary>
     /// Objects of this type are returned from

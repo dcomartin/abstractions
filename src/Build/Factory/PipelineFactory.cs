@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Unity
+namespace Unity.Build.Factory
 {
     public delegate T PipelineFactoryDelegate<T>(T next);
 

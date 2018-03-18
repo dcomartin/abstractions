@@ -38,7 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Builder\Selection\" />
+    <Compile Remove="Builder\Selection\**" />
+    <EmbeddedResource Remove="Builder\Selection\**" />
+    <None Remove="Builder\Selection\**" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

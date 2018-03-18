@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Unity.Build.Selected;
 using Unity.Dependency;
 using Unity.Policy;
 using Unity.Registration;
@@ -68,11 +69,12 @@ namespace Unity.Builder.Policy
                 result = new SelectedConstructor(constructor);
             }
 
-            foreach (var parameterValue in _parameterValues)
-            {
-                var resolver = parameterValue.GetResolverPolicy(context.BuildKey.Type);
-                result.AddParameterResolver(resolver);
-            }
+            // TODO: 
+            //foreach (var parameterValue in _parameterValues)
+            //{
+            //    var resolver = parameterValue.GetResolverPolicy(context.BuildKey.Type);
+            //    result.AddParameterResolver(resolver);
+            //}
 
             return result;
         }

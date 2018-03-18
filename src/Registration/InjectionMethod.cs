@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Unity.Builder.Policy;
+using Unity.Dependency;
 using Unity.Policy;
-using Unity.Utility;
 
 namespace Unity.Registration
 {
@@ -13,10 +12,9 @@ namespace Unity.Registration
     /// An <see cref="InjectionMember"/> that configures the
     /// container to call a method as part of buildup.
     /// </summary>
-    public class InjectionMethod : InjectionMember
+    public class InjectionMethod : InjectionMemberWithParameters
     {
         private readonly string _methodName;
-        private readonly List<InjectionParameterValue> _methodParameters;
 
         /// <summary>
         /// Create a new <see cref="InjectionMethod"/> instance which will configure
@@ -25,28 +23,19 @@ namespace Unity.Registration
         /// <param name="methodName">Name of the method to call.</param>
         /// <param name="methodParameters">Parameter values for the method.</param>
         public InjectionMethod(string methodName, params object[] methodParameters)
+            : base(methodParameters)
         {
             _methodName = methodName;
-            throw new NotImplementedException(); // TODO: Add implementation
-            //_methodParameters = InjectionParameterValue.ToParameters(methodParameters).ToList();
         }
 
-        /// <summary>
-        /// Add policies to the <paramref name="policies"/> to configure the
-        /// container to call this constructor with the appropriate parameter values.
-        /// </summary>
-        /// <param name="serviceType">Type of interface registered, ignored in this implementation.</param>
-        /// <param name="implementationType">Type to register.</param>
-        /// <param name="name">Name used to resolve the type object.</param>
-        /// <param name="policies">Policy list to add policies to.</param>
         public override void AddPolicies(Type serviceType, Type implementationType, string name, IPolicyList policies)
         {
-            MethodInfo methodInfo = FindMethod(implementationType);
-            ValidateMethodCanBeInjected(methodInfo, implementationType);
+            //MethodInfo methodInfo = FindMethod(implementationType);
+            //ValidateMethodCanBeInjected(methodInfo, implementationType);
 
-            SpecifiedMethodsSelectorPolicy selector =
-                GetSelectorPolicy(policies, serviceType, name);
-            selector.AddMethodAndParameters(methodInfo, _methodParameters);
+            //SpecifiedMethodsSelectorPolicy selector =
+            //    GetSelectorPolicy(policies, serviceType, name);
+            //selector.AddMethodAndParameters(methodInfo, _methodParameters);
         }
 
         public override bool BuildRequired => true;
@@ -65,16 +54,16 @@ namespace Unity.Registration
 
         private MethodInfo FindMethod(Type typeToCreate)
         {
-            foreach (MethodInfo method in typeToCreate.GetMethodsHierarchical())
-            {
-                if (MethodNameMatches(method, _methodName))
-                {
-                    if (_methodParameters.Matches(method.GetParameters().Select(p => p.ParameterType)))
-                    {
-                        return method;
-                    }
-                }
-            }
+            //foreach (MethodInfo method in typeToCreate.GetMethodsHierarchical())
+            //{
+            //    if (MethodNameMatches(method, _methodName))
+            //    {
+            //        if (_methodParameters.Matches(method.GetParameters().Select(p => p.ParameterType)))
+            //        {
+            //            return method;
+            //        }
+            //    }
+            //}
             return null;
         }
 
@@ -129,12 +118,13 @@ namespace Unity.Registration
 
         private void ThrowIllegalInjectionMethod(string message, Type typeToCreate)
         {
-            throw new InvalidOperationException(
-                string.Format(CultureInfo.CurrentCulture,
-                    message,
-                    typeToCreate.GetTypeInfo().Name,
-                    _methodName,
-                    string.Join(", ", _methodParameters.Select(mp => mp.ParameterType?.Name))));
+            // TODO:
+            //throw new InvalidOperationException(
+            //    string.Format(CultureInfo.CurrentCulture,
+            //        message,
+            //        typeToCreate.GetTypeInfo().Name,
+            //        _methodName,
+            //        string.Join(", ", Parameters.Select(mp => mp.ParameterType?.Name))));
         }
 
         private static SpecifiedMethodsSelectorPolicy GetSelectorPolicy(IPolicyList policies, Type typeToCreate, string name)
