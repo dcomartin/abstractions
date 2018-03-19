@@ -1,4 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using Unity.Build.Context;
+using Unity.Build.Factory;
 
 namespace Unity.Build.Selected
 {
@@ -16,13 +21,40 @@ namespace Unity.Build.Selected
         /// </summary>
         /// <param name="method">The method</param>
         public SelectedMethod(MethodInfo method)
-            : base(method, null)             // TODO:
+            : base(method, method.GetParameters())             
         {
         }
+
 
         /// <summary>
         /// The constructor this object wraps.
         /// </summary>
         public MethodInfo Method => MemberInfo;
+
+
+        public override ResolveMethodFactory<Type> ResolveMethodFactory => (type) =>
+        {
+            var pipeline = base.ResolveMethodFactory(type);
+
+            if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
+            {
+                var methodInfo = MemberInfo;
+                return (ref ResolutionContext context) => methodInfo.Invoke(context.Existing, (object[])pipeline(ref context));
+            }
+
+            Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
+
+            // TODO: Check if create info from Generic Type Definition is faster
+            var index = -1;
+            foreach (var member in MemberInfo.DeclaringType.GetTypeInfo().DeclaredMethods)
+            {
+                index += 1;
+                if (MemberInfo != member) continue;
+                break;
+            }
+
+            var method = type.GetTypeInfo().DeclaredMethods.ElementAt(index);
+            return (ref ResolutionContext context) => method.Invoke(context.Existing, (object[])pipeline(ref context));
+        };
     }
 }

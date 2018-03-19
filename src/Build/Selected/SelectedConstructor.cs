@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Unity.Build.Context;
-using Unity.Build.Pipeline;
+using Unity.Build.Factory;
 
 namespace Unity.Build.Selected
 {
@@ -31,19 +33,35 @@ namespace Unity.Build.Selected
         {
         }
 
+
         /// <summary>
         /// The constructor this object wraps.
         /// </summary>
         public ConstructorInfo Constructor => MemberInfo;
 
 
-        public override CreateResolver<Type> CreateResolver => (type) => 
+        public override ResolveMethodFactory<Type> ResolveMethodFactory => (type) => 
         {
-            var pipeline = base.CreateResolver(type);
-            if (MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
-                return (ref ResolutionContext context) => Activator.CreateInstance(type, (object[])pipeline(ref context));
+            var pipeline = base.ResolveMethodFactory(type);
 
-            return (ref ResolutionContext context) => MemberInfo.Invoke((object[])pipeline(ref context));
+            if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
+            {
+                var constructorInfo = MemberInfo;
+                return (ref ResolutionContext context) => constructorInfo.Invoke((object[])pipeline(ref context));
+            }
+
+            Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
+
+            var index = -1;
+            foreach (var member in MemberInfo.DeclaringType.GetTypeInfo().DeclaredConstructors)
+            {
+                index += 1;
+                if (MemberInfo != member) continue;
+                break;
+            }
+
+            var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
+            return (ref ResolutionContext context) => ctor.Invoke((object[])pipeline(ref context));
         };
     }
 }

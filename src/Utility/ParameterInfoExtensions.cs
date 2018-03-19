@@ -2,25 +2,42 @@
 using System.Reflection;
 using Unity.Attributes;
 using Unity.Build.Context;
+using Unity.Build.Factory;
 using Unity.Build.Pipeline;
-using Unity.Pipeline;
 
 namespace Unity.Utility
 {
     public static class ParameterInfoExtensions
     {
 
-        public static CreateResolver<Type> ToFactory(this ParameterInfo parameter, object arg)
+        public static ResolveMethodFactory<Type> ToFactory(this ParameterInfo parameter, object arg)
         {
             switch (arg)
             {
                 case Type type:
-                    return parameter.ParameterType.Equals(type)
-                           ? parameter.ToFactory()
-                           : (Type runtime) => (ref ResolutionContext context) => type;
+                    if (parameter.ParameterType.IsGenericParameter)
+                    {
+                        var position = parameter.Position;
+                        return (Type t) =>
+                        {
+                            var runtimeType = t.GenericTypeArguments[position];
 
-                case ICreateResolver<ParameterInfo> factory:
-                    var pipeline = factory.CreateResolver(parameter);
+                            if (type.Equals(runtimeType))
+                                return parameter.ToFactory()(t);
+
+                            return (ref ResolutionContext context) => type;
+                        };
+                    }
+                    else if (parameter.ParameterType.Equals(type))
+                    {
+                        return parameter.ToFactory();
+                    }
+                    else
+                        return (Type t) => (ref ResolutionContext context) => type;
+
+
+                case IResolveMethodFactory<ParameterInfo> factory:
+                    var pipeline = factory.ResolveMethodFactory(parameter);
                     return (Type runtime) => pipeline;
 
                 default:
@@ -33,7 +50,7 @@ namespace Unity.Utility
         /// </summary>
         /// <param name="parameter">Parameter info to process</param>
         /// <returns>Pipeline facotory method</returns>
-        public static CreateResolver<Type> ToFactory(this ParameterInfo parameter)
+        public static ResolveMethodFactory<Type> ToFactory(this ParameterInfo parameter)
         {
             var attribute = (DependencyResolutionAttribute)parameter.GetCustomAttribute(typeof(DependencyResolutionAttribute));
             var info = parameter.ParameterType.GetTypeInfo();
@@ -80,7 +97,7 @@ namespace Unity.Utility
         /// <param name="declaringType"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        private static CreateResolver<Type> ArrayToFactory(this ParameterInfo parameter,
+        private static ResolveMethodFactory<Type> ArrayToFactory(this ParameterInfo parameter,
                                                                 TypeInfo info,
                                                                 DependencyResolutionAttribute attribute)
         {
@@ -215,7 +232,7 @@ namespace Unity.Utility
         /// <param name="declaringType"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        private static CreateResolver<Type> GenericToFactorry(this ParameterInfo parameter,
+        private static ResolveMethodFactory<Type> GenericToFactorry(this ParameterInfo parameter,
                                                                    TypeInfo info,
                                                                    DependencyResolutionAttribute attribute)
         {

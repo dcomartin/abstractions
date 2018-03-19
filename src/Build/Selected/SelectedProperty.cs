@@ -10,7 +10,7 @@ namespace Unity.Build.Selected
     /// the property with the string key used to look up the resolver
     /// for this property's value.
     /// </summary>
-    public class SelectedProperty
+    public class SelectedProperty 
     {
         /// <summary>
         /// Create an instance of <see cref="SelectedProperty"/>

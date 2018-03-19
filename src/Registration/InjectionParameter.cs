@@ -2,8 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Unity.Build.Context;
-using Unity.Build.Pipeline;
-using Unity.Pipeline;
+using Unity.Build.Factory;
 using Unity.Policy;
 
 namespace Unity.Registration
@@ -13,7 +12,7 @@ namespace Unity.Registration
     /// the required resolver when the declaring type is instantiated.
     /// </summary>
     [DebuggerDisplay("InjectionParameter:  Type={ParameterType?.Name},  Value={ParameterValue}")]
-    public class InjectionParameter : ICreateResolver<ParameterInfo>
+    public class InjectionParameter : IResolveMethodFactory<ParameterInfo>
     {
         #region Constructors
 
@@ -26,7 +25,7 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = type;
-            CreateResolver = (ParameterInfo info) => (ref ResolutionContext context) => type;
+            ResolveMethodFactory = (ParameterInfo info) => (ref ResolutionContext context) => type;
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace Unity.Registration
         {
             ParameterValue = value;
             ParameterType = value is Type ? typeof(Type) : value?.GetType();
-            CreateResolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            ResolveMethodFactory = (ParameterInfo info) => (ref ResolutionContext context) => value;
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = value ?? throw new ArgumentNullException(nameof(value));
-            CreateResolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            ResolveMethodFactory = (ParameterInfo info) => (ref ResolutionContext context) => value;
         }
 
         #endregion
@@ -70,7 +69,7 @@ namespace Unity.Registration
         /// </summary>
         public virtual object ParameterValue { get; }
 
-        public CreateResolver<ParameterInfo> CreateResolver { get; protected set; }
+        public ResolveMethodFactory<ParameterInfo> ResolveMethodFactory { get; protected set; }
 
         /// <summary>
         /// Test if this parameter matches type.

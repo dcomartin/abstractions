@@ -1,13 +1,12 @@
 ﻿using System;
-using Unity.Build.Selected;
+using Unity.Build.Factory;
 
 namespace Unity.Build.Pipeline
 {
-
-    public delegate SelectedConstructor SelectConstructor(Type type);
+    public delegate IResolveMethodFactory<Type> SelectConstructor(Type type);
 
     public interface ISelectConstructor
     {
-        SelectConstructor SelectConstructor { get; }
+        IResolveMethodFactory<Type> SelectConstructor { get; }
     }
 }

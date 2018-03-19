@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Unity.Build.Pipeline;
+using Unity.Build.Selected;
 using Unity.Policy;
 using Unity.Registration;
 
@@ -73,7 +74,7 @@ namespace Unity.Abstractions.Tests.Registration
             var selectConstructorPipeline = _set.Get<SelectConstructor>();
             Assert.IsNotNull(selectConstructorPipeline);
 
-            var selectedConstructor = selectConstructorPipeline(type);
+            var selectedConstructor = (SelectedConstructor)selectConstructorPipeline(type);
             Assert.IsNotNull(selectedConstructor);
 
             var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
@@ -94,8 +95,8 @@ namespace Unity.Abstractions.Tests.Registration
             var param = new InjectionParameter(typeof(object));
             var ctor = new InjectionConstructor(param);
 
-            var wr = new WeakReference(ctor);
-            var pr = new WeakReference(param);
+            var ctorPtr = new WeakReference(ctor);
+            var paramPtr = new WeakReference(param);
 
             ctor.AddPolicies(typeof(TestClass), null, null, _set);
 
@@ -103,15 +104,17 @@ namespace Unity.Abstractions.Tests.Registration
             param = null;
 
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
-            Assert.IsFalse(wr.IsAlive);
-            Assert.IsFalse(pr.IsAlive);
+            Assert.IsFalse(ctorPtr.IsAlive);
+            Assert.IsFalse(paramPtr.IsAlive);
 
             var resolver = _set.Get<SelectConstructor>();
             Assert.IsNotNull(resolver);
 
-            var selection = resolver(typeof(TestClass));
+            var selection = (SelectedConstructor)resolver(typeof(TestClass));
             Assert.IsNotNull(selection);
-            Assert.AreEqual(1, selection.Constructor.GetParameters().Length);
+
+            var factory = selection.ResolveMethodFactory(typeof(TestClass));
+            Assert.IsNotNull(factory);
         }
 
         [TestMethod]
@@ -123,7 +126,7 @@ namespace Unity.Abstractions.Tests.Registration
             var resolver = _set.Get<SelectConstructor>();
             Assert.IsNotNull(resolver);
 
-            var selection = resolver(typeof(TestClass));
+            var selection = (SelectedConstructor)resolver(typeof(TestClass));
             Assert.IsNotNull(selection);
             Assert.AreEqual(0, selection.Constructor.GetParameters().Length);
         }
@@ -177,8 +180,5 @@ namespace Unity.Abstractions.Tests.Registration
         }
 
         #endregion
-
-        /* RegisterType(null, typeof(GenericInjectionTestClass<,,>), null, null, new InjectionConstructor(typeof(GenericDependencyClass<,>) */
-
     }
 }

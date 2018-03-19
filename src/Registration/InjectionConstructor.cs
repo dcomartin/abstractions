@@ -3,7 +3,6 @@ using System.Reflection;
 using Unity.Build.Pipeline;
 using Unity.Build.Selected;
 using Unity.Dependency;
-using Unity.Pipeline;
 using Unity.Policy;
 
 namespace Unity.Registration
@@ -62,6 +61,10 @@ namespace Unity.Registration
             if (null == constructor)
                 throw new InvalidOperationException(ErrorMessage(type, Constants.NoSuchConstructor));
 
+
+            policies.Set(typeof(SelectedConstructor), constructor);
+            
+            // TODO: Remove
             SelectConstructor pipeline = (Type t) => constructor;
             policies.Set(typeof(SelectConstructor), pipeline);
         }

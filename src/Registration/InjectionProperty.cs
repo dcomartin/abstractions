@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +14,7 @@ namespace Unity.Registration
     /// This class stores information about which properties to inject,
     /// and will configure the container accordingly.
     /// </summary>
+    //[DebuggerDisplay("InjectionParameter:  Name={_propertyName},  Value={ParameterValue}")]
     public class InjectionProperty : InjectionMember
     {
         private readonly string _propertyName;
