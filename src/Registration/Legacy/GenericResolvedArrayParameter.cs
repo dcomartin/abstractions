@@ -29,7 +29,9 @@ namespace Unity.Registration
         public GenericResolvedArrayParameter(string genericParameterName, params object[] elementValues)
             : base(null) // TODO: Add proper implementation
         {
-            _genericParameterName = genericParameterName ?? throw new ArgumentNullException(nameof(genericParameterName));
+            // TODO:
+            throw new NotImplementedException();
+            //_genericParameterName = genericParameterName ?? throw new ArgumentNullException(nameof(genericParameterName));
 // TODO:            _elementValues.AddRange(ToParameters(elementValues));
         }
 
@@ -44,15 +46,17 @@ namespace Unity.Registration
         /// parameter name configured for the receiver.</remarks>
         public override bool MatchesType(Type type)
         {
-            var t = type ?? throw new ArgumentNullException(nameof(type));
+            // TODO:
+            throw new NotImplementedException();
+            //var t = type ?? throw new ArgumentNullException(nameof(type));
 
-            if (!t.IsArray || t.GetArrayRank() != 1)
-            {
-                return false;
-            }
+            //if (!t.IsArray || t.GetArrayRank() != 1)
+            //{
+            //    return false;
+            //}
 
-            Type elementType = t.GetElementType();
-            return elementType.GetTypeInfo().IsGenericParameter && elementType.GetTypeInfo().Name == _genericParameterName;
+            //Type elementType = t.GetElementType();
+            //return elementType.GetTypeInfo().IsGenericParameter && elementType.GetTypeInfo().Name == _genericParameterName;
         }
 
         /// <summary>
@@ -64,43 +68,45 @@ namespace Unity.Registration
         /// <returns>The <see cref="IResolverPolicy"/>.</returns>
         public override IResolverPolicy GetResolverPolicy(Type typeToBuild)
         {
-            GuardTypeToBuildIsGeneric(typeToBuild);
-            GuardTypeToBuildHasMatchingGenericParameter(typeToBuild);
+            // TODO:
+            throw new NotImplementedException();
+            //GuardTypeToBuildIsGeneric(typeToBuild);
+            //GuardTypeToBuildHasMatchingGenericParameter(typeToBuild);
 
-            Type typeToResolve = typeToBuild.GetNamedGenericParameter(_genericParameterName);
-            var elementPolicies = _elementValues.Select(pv => pv.GetResolverPolicy(typeToBuild)).ToArray();
-            return new ResolvedArrayWithElementsResolverPolicy(typeToResolve, elementPolicies);
+            //Type typeToResolve = typeToBuild.GetNamedGenericParameter(_genericParameterName);
+            //var elementPolicies = _elementValues.Select(pv => pv.GetResolverPolicy(typeToBuild)).ToArray();
+            //return new ResolvedArrayWithElementsResolverPolicy(typeToResolve, elementPolicies);
         }
 
         private void GuardTypeToBuildIsGeneric(Type typeToBuild)
         {
-            if (!typeToBuild.GetTypeInfo().IsGenericType)
-            {
-                throw new InvalidOperationException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Constants.NotAGenericType,
-                        typeToBuild.GetTypeInfo().Name,
-                        _genericParameterName));
-            }
+            //if (!typeToBuild.GetTypeInfo().IsGenericType)
+            //{
+            //    throw new InvalidOperationException(
+            //        string.Format(
+            //            CultureInfo.CurrentCulture,
+            //            Constants.NotAGenericType,
+            //            typeToBuild.GetTypeInfo().Name,
+            //            _genericParameterName));
+            //}
         }
 
         private void GuardTypeToBuildHasMatchingGenericParameter(Type typeToBuild)
         {
-            foreach (Type genericParam in typeToBuild.GetGenericTypeDefinition().GetTypeInfo().GenericTypeParameters)
-            {
-                if (genericParam.GetTypeInfo().Name == _genericParameterName)
-                {
-                    return;
-                }
-            }
+            //foreach (Type genericParam in typeToBuild.GetGenericTypeDefinition().GetTypeInfo().GenericTypeParameters)
+            //{
+            //    if (genericParam.GetTypeInfo().Name == _genericParameterName)
+            //    {
+            //        return;
+            //    }
+            //}
 
-            throw new InvalidOperationException(
-                string.Format(
-                    CultureInfo.CurrentCulture,
-                    Constants.NoMatchingGenericArgument,
-                    typeToBuild.GetTypeInfo().Name,
-                    _genericParameterName));
+            //throw new InvalidOperationException(
+            //    string.Format(
+            //        CultureInfo.CurrentCulture,
+            //        Constants.NoMatchingGenericArgument,
+            //        typeToBuild.GetTypeInfo().Name,
+            //        _genericParameterName));
         }
     }
 }

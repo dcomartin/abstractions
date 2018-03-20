@@ -56,7 +56,7 @@ namespace Unity.Registration
         /// <param name="implementationType">Type to register.</param>
         /// <param name="name">Name used to resolve the type object.</param>
         /// <param name="policies">Policy list to add policies to.</param>
-        public override void AddPolicies(Type serviceType, Type implementationType, string name, IPolicyList policies)
+        public void AddPolicies(Type serviceType, Type implementationType, string name, IPolicyList policies)
         {
             var propInfo =
                 (implementationType ?? throw new ArgumentNullException(nameof(implementationType))).GetPropertiesHierarchical()
@@ -75,7 +75,6 @@ namespace Unity.Registration
             selector.AddPropertyAndValue(propInfo, _parameterValue);
         }
 
-        public override bool BuildRequired => true;
 
         private InjectionParameterValue InitializeParameterValue(PropertyInfo propInfo)
         {

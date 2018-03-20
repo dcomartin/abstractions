@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.Dependency;
 using Unity.Registration;
 
@@ -76,14 +77,28 @@ namespace Unity.Abstractions.Tests.Registration
 
         #region Test Data
 
-        private class TestMember : InjectionMemberWithParameters
+        private class TestMember : InjectionMemberWithParameters<ConstructorInfo>
         {
             public TestMember(params object[] args)
                 : base(args)
             {
             }
 
+            protected override string NoMemberFound => throw new NotImplementedException();
+
+            protected override string MultipleFound => throw new NotImplementedException();
+
             public bool Match(object obj, Type type) => Matches(obj, type);
+
+            protected override IEnumerable<ConstructorInfo> GetMemberInfos(Type type)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override ParameterInfo[] GetParameters(ConstructorInfo memberInfo)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion

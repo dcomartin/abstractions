@@ -3,13 +3,25 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Unity.Registration;
+using Unity.Policy;
+using System.Collections.Generic;
 
 namespace Unity.Dependency
 {
-    public class InjectionMemberWithParameters : InjectionMember
+    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember
     {
+        #region Error Constants
+
+        protected abstract string NoMemberFound { get; }
+
+        protected abstract string MultipleFound { get; }
+
+        #endregion
+
+
         #region Fields
 
+        protected TMemberInfoType MemberInfo;
         protected readonly object[] Parameters;
 
         #endregion
@@ -25,6 +37,39 @@ namespace Unity.Dependency
         protected InjectionMemberWithParameters(params object[] values)
         {
             Parameters = values ?? new object[0];
+        }
+
+        #endregion
+
+
+        #region InjectionMember
+
+        public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
+        {
+            var type = implementationType ?? registeredType;
+            TMemberInfoType selection = default;
+
+            foreach (var info in GetMemberInfos(type))
+            {
+                if (!Matches(GetParameters(info))) continue;
+
+                //if (null != selection)
+                //    throw new InvalidOperationException(MoreThanOneConstructor(type, selection, member));
+
+                selection = info;
+            }
+
+            //if (null == selection)
+            //    throw new InvalidOperationException(ErrorMessage(type, Constants.NoSuchConstructor));
+
+            //policies.Set(typeof(SelectedConstructor), selection);
+
+            //// TODO: Remove
+            //SelectConstructor pipeline = (Type t) => selection;
+            //policies.Set(typeof(SelectConstructor), pipeline);
+
+
+            //base.AddPolicies(registeredType, name, implementationType, policies);
         }
 
         #endregion
@@ -67,6 +112,13 @@ namespace Unity.Dependency
 
 
         #region Implementation
+
+        protected abstract IEnumerable<TMemberInfoType> GetMemberInfos(Type type);
+
+        protected abstract ParameterInfo[] GetParameters(TMemberInfoType memberInfo);
+
+
+
 
         protected string ErrorMessage(Type type, string format)
         {

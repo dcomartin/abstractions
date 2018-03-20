@@ -24,14 +24,9 @@ namespace Unity.Build.Context
 
 
 
-        public object Get(Type policyInterface) => _get(policyInterface);
+        public object Get(Type type, string name, Type policyInterface) => _get(type, name, policyInterface);
 
-        public void Set(Type policyInterface, object policy) => _set(policyInterface, policy);
-
-
-        public object Get(Type type, string name, Type policyInterface) => _getNamed(type, name, policyInterface);
-
-        public void Set(Type type, string name, Type policyInterface, object policy) => _setNamed(type, name, policyInterface, policy);
+        public void Set(Type type, string name, Type policyInterface, object policy) => _set(type, name, policyInterface, policy);
 
 
         public ResolveDependency Resolve;
@@ -39,8 +34,8 @@ namespace Unity.Build.Context
 
         #region Implementation
 
-        public ResolutionContext(Func<Type, object> get, Func<Type, string, Type, object> getNamed, 
-                                 Action<Type, object> set, Action<Type, string, Type, object> setNamed)
+        public ResolutionContext(Func<Type, string, Type, object> getMethod, 
+                               Action<Type, string, Type, object> setMethod)
         {
             LifetimeContainer = null;
             Registration = null;
@@ -49,16 +44,12 @@ namespace Unity.Build.Context
             Existing = null;
             Resolve = null;
 
-            _get = get;
-            _set = set;
-            _getNamed = getNamed;
-            _setNamed = setNamed;
+            _get = getMethod;
+            _set = setMethod;
         }
 
-        private Func<Type, object> _get;
-        private Action<Type, object> _set;
-        private Func<Type, string, Type, object> _getNamed;
-        private Action<Type, string, Type, object> _setNamed;
+        private Func<Type, string, Type, object> _get;
+        private Action<Type, string, Type, object> _set;
 
         #endregion
     }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Unity.Build.Pipeline;
 using Unity.Build.Selected;
@@ -12,15 +14,26 @@ namespace Unity.Registration
     /// for a constructor, so that the container can
     /// be configured to call this constructor.
     /// </summary>
-    public class InjectionConstructor : InjectionMemberWithParameters
+    public class InjectionConstructor : InjectionMemberWithParameters<ConstructorInfo>
     {
+        #region Error Constants
+
+        protected override string NoMemberFound => Constants.NoSuchConstructor;
+        // TODO: App proper error message
+        protected override string MultipleFound { get; }
+
+        #endregion
+
+
+
         #region Constructors
 
         /// <summary>
         /// Create a new instance of <see cref="InjectionConstructor"/> that looks
         /// for a default constructor.
         /// </summary>
-        public InjectionConstructor() : base()
+        public InjectionConstructor() 
+            : base()
         {
         }
 
@@ -33,6 +46,11 @@ namespace Unity.Registration
         public InjectionConstructor(params object[] values)
             : base(values)
         {
+        }
+
+        public InjectionConstructor(ConstructorInfo info)
+        {
+            MemberInfo = info;
         }
 
         #endregion
@@ -68,6 +86,16 @@ namespace Unity.Registration
             SelectConstructor pipeline = (Type t) => constructor;
             policies.Set(typeof(SelectConstructor), pipeline);
         }
+
+        #endregion
+
+
+        #region Implementation
+
+        protected override IEnumerable<ConstructorInfo> GetMemberInfos(Type type) => type.GetTypeInfo()
+                                                                                     .DeclaredConstructors
+                                                                                     .Where(c => !c.IsStatic && c.IsPublic);
+        protected override ParameterInfo[] GetParameters(ConstructorInfo ctorInfo) => ctorInfo.GetParameters();
 
         #endregion
 

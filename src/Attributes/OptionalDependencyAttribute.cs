@@ -1,8 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using Unity.Policy;
-using Unity.ResolverPolicy;
 
 namespace Unity.Attributes
 {
@@ -42,7 +39,9 @@ namespace Unity.Attributes
         /// <returns>The resolver object.</returns>
         public override IResolverPolicy CreateResolver(Type typeToResolve)
         {
-            return new OptionalDependencyResolverPolicy(typeToResolve, Name);
+            // TODO:
+            throw new NotImplementedException();
+            //return new OptionalDependencyResolverPolicy(typeToResolve, Name);
         }
     }
 }

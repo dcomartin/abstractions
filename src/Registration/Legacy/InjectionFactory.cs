@@ -55,7 +55,7 @@ namespace Unity.Registration
         /// <param name="implementationType">Type of concrete type being registered.</param>
         /// <param name="name">Name used to resolve the type object.</param>
         /// <param name="policies">Policy list to add policies to.</param>
-        public override void AddPolicies(Type serviceType, Type implementationType, string name, IPolicyList policies)
+        public void AddPolicies(Type serviceType, Type implementationType, string name, IPolicyList policies)
         {
             policies.Set(serviceType, name, typeof(IBuildPlanPolicy), this);
         }
