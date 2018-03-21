@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Unity.Build.Factory;
+using Unity.Build.Injection;
 using Unity.Builder;
 using Unity.Builder.Policy;
 using Unity.Policy;
@@ -15,12 +17,13 @@ namespace Unity.Registration
     /// and will configure the container accordingly.
     /// </summary>
     //[DebuggerDisplay("InjectionParameter:  Name={_propertyName},  Value={ParameterValue}")]
-    public class InjectionProperty : InjectionMember
+    public class InjectionProperty : InjectionMember, IInjectionProperty
     {
         private readonly string _propertyName;
         // TODO:
 #pragma warning disable 649
         private InjectionParameterValue _parameterValue;
+
 #pragma warning restore 649
 
         /// <summary>
@@ -46,6 +49,12 @@ namespace Unity.Registration
         {
             //_propertyName = propertyName;
             //_parameterValue = InjectionParameterValue.ToParameter(propertyValue);
+        }
+
+
+        public InjectionProperty(PropertyInfo info, object args = null)
+        {
+            
         }
 
         /// <summary>
@@ -74,6 +83,21 @@ namespace Unity.Registration
 
             selector.AddPropertyAndValue(propInfo, _parameterValue);
         }
+
+
+        #region IInjectionProperty
+
+        public ResolveMethodFactory<Type> ResolveMethodFactory => throw new NotImplementedException();
+
+        #endregion
+
+
+
+
+
+
+
+
 
 
         private InjectionParameterValue InitializeParameterValue(PropertyInfo propInfo)

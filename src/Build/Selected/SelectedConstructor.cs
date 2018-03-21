@@ -40,7 +40,7 @@ namespace Unity.Build.Selected
         public ConstructorInfo Constructor => MemberInfo;
 
 
-        public override ResolveMethodFactory<Type> ResolveMethodFactory => (type) => 
+        public override ResolveMethodFactory<Type> ResolveMethodFactory => (Type type) => 
         {
             var pipeline = base.ResolveMethodFactory(type);
 

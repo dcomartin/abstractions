@@ -15,12 +15,9 @@ namespace Unity.Registration
         /// <param name="registeredType">Registration type</param>
         /// <param name="name">Registration naem</param>
         /// <param name="implementationType">Type of the implementation</param>
-        /// <param name="policies">Set of policies associated with registration</param>
-        public virtual void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
+        /// <param name="set">Set where policies are kept</param>
+        public virtual void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet set)
         {
-            policies.Set(GetType(), this);  // By default add itself to the set
         }
-
-
     }
 }

@@ -16,7 +16,9 @@ namespace Unity.Registration
     /// </summary>
     public class GenericResolvedArrayParameter : InjectionParameter
     {
+#pragma warning disable 169
         private readonly string _genericParameterName;
+#pragma warning restore 169
         private readonly List<InjectionParameter> _elementValues = new List<InjectionParameter>();
 
         /// <summary>

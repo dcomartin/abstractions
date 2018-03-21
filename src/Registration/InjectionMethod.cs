@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Unity.Dependency;
+using Unity.Build.Context;
+using Unity.Build.Factory;
+using Unity.Build.Injection;
 
 namespace Unity.Registration
 {
@@ -10,20 +12,11 @@ namespace Unity.Registration
     /// An <see cref="InjectionMember"/> that configures the
     /// container to call a method as part of buildup.
     /// </summary>
-    public class InjectionMethod : InjectionMemberWithParameters<MethodInfo>
+    public class InjectionMethod : InjectionMemberWithParameters<MethodInfo>, 
+                                   IInjectionMethod
     {
-        #region Error Constants
-
-        protected override string NoMemberFound => Constants.NoSuchMethod;
-        // TODO: App proper error message
-        protected override string MultipleFound { get; }
-
-        #endregion
-
-        
         #region Fields
 
-        private readonly string _methodName;
 
         #endregion
 
@@ -31,17 +24,10 @@ namespace Unity.Registration
         #region Constructors
 
         public InjectionMethod()
-            : base()
         {
         }
 
         public InjectionMethod(string name)
-            : base()
-        {
-        }
-
-        public InjectionMethod(Type func)
-            : base()
         {
         }
 
@@ -50,32 +36,51 @@ namespace Unity.Registration
             MemberInfo = info;
         }
 
-        public InjectionMethod(params object[] methodParameters)
-            : base(methodParameters)
+        public InjectionMethod(params object[] args)
+            : base(args)
         {
         }
 
-        public InjectionMethod(string name, params object[] methodParameters)
-            : base()
+        public InjectionMethod(string name, params object[] args)
+            : base(args)
         {
         }
 
-        #endregion
-
-
-        #region InjectionMember
 
         #endregion
 
 
-        #region Implementation
+        #region IInjectionMethod
 
-        protected override IEnumerable<MethodInfo> GetMemberInfos(Type type) => type.GetTypeInfo()
-                                                                                    .DeclaredMethods
-                                                                                    .Where(m => !m.IsStatic && m.IsPublic);
-        protected override ParameterInfo[] GetParameters(MethodInfo methodInfo) => methodInfo.GetParameters();
+
+        public MethodInfo Method => MemberInfo;
+
+
+        public override ResolveMethodFactory<Type> ResolveMethodFactory => (type) =>
+        {
+            var pipeline = base.ResolveMethodFactory(type);
+
+            if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
+            {
+                var methodInfo = MemberInfo;
+                return (ref ResolutionContext context) => methodInfo.Invoke(context.Existing, (object[])pipeline(ref context));
+            }
+
+            Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
+
+            // TODO: Check if create info from Generic Type Definition is faster
+            var index = -1;
+            foreach (var member in MemberInfo.DeclaringType.GetTypeInfo().DeclaredMethods)
+            {
+                index += 1;
+                if (MemberInfo != member) continue;
+                break;
+            }
+
+            var method = type.GetTypeInfo().DeclaredMethods.ElementAt(index);
+            return (ref ResolutionContext context) => method.Invoke(context.Existing, (object[])pipeline(ref context));
+        };
 
         #endregion
-
     }
 }

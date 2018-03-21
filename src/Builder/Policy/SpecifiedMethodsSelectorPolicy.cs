@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Unity.Build.Selected;
-using Unity.Dependency;
 using Unity.Policy;
 using Unity.Registration;
 using Unity.Utility;

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Unity.Build.Selected;
-using Unity.Dependency;
 using Unity.Policy;
 using Unity.Registration;
 

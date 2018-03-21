@@ -3,11 +3,10 @@ using System.Reflection;
 using Unity.Attributes;
 using Unity.Build.Context;
 using Unity.Build.Factory;
-using Unity.Build.Pipeline;
 
-namespace Unity.Utility
+namespace Unity.Build.Injection
 {
-    public static class ParameterInfoExtensions
+    public static class InjectionParameterInfo
     {
 
         public static ResolveMethodFactory<Type> ToFactory(this ParameterInfo parameter, object arg)
@@ -18,27 +17,27 @@ namespace Unity.Utility
                     if (parameter.ParameterType.IsGenericParameter)
                     {
                         var position = parameter.Position;
-                        return (Type t) =>
+                        return t =>
                         {
                             var runtimeType = t.GenericTypeArguments[position];
 
-                            if (type.Equals(runtimeType))
+                            if (type == runtimeType)
                                 return parameter.ToFactory()(t);
 
                             return (ref ResolutionContext context) => type;
                         };
                     }
-                    else if (parameter.ParameterType.Equals(type))
+                    else if (parameter.ParameterType == type)
                     {
                         return parameter.ToFactory();
                     }
                     else
-                        return (Type t) => (ref ResolutionContext context) => type;
+                        return t => (ref ResolutionContext context) => type;
 
 
                 case IResolveMethodFactory<ParameterInfo> factory:
                     var pipeline = factory.ResolveMethodFactory(parameter);
-                    return (Type runtime) => pipeline;
+                    return runtime => pipeline;
 
                 default:
                     return parameter.ToFactory();
@@ -64,7 +63,7 @@ namespace Unity.Utility
                 // Simple type
 
                 // Factory            // Resolver
-                return (Type type) => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
+                return type => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
             // Parameter of generic type:
@@ -77,7 +76,7 @@ namespace Unity.Utility
             var index = info.GenericParameterPosition;
 
             // Factory            // Resolver
-            return (Type type) => (ref ResolutionContext context) =>
+            return type => (ref ResolutionContext context) =>
                 context.Resolve(type.GetTypeInfo().GenericTypeArguments[index], attribute?.Name);
         }
 
@@ -94,12 +93,12 @@ namespace Unity.Utility
         ///  }
         /// </remarks>
         /// <param name="parameter"></param>
-        /// <param name="declaringType"></param>
+        /// <param name="info"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        private static ResolveMethodFactory<Type> ArrayToFactory(this ParameterInfo parameter,
-                                                                TypeInfo info,
-                                                                DependencyResolutionAttribute attribute)
+        private static ResolveMethodFactory<Type> ArrayToFactory(this ParameterInfo parameter, 
+                                                                      TypeInfo info,
+                                                                      DependencyResolutionAttribute attribute)
         {
 
             var depth = 0;
@@ -126,7 +125,7 @@ namespace Unity.Utility
                     // SomeClass(DepClass<int, string> c) 
 
                     // Factory
-                    return (Type type) =>
+                    return type =>
                     {
                         var elementType = element;
                         while (0 < depth--) elementType = elementType.MakeArrayType();
@@ -135,52 +134,49 @@ namespace Unity.Utility
                         return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                     };
                 }
-                else
-                {
-                    // Open generic parameters in dependency:
-                    //  {
-                    //      public SomeClass(DepClass<A, C, int> c) <--- (A, C)
-                    //  }
+                // Open generic parameters in dependency:
+                //  {
+                //      public SomeClass(DepClass<A, C, int> c) <--- (A, C)
+                //  }
 
-                    var indexes = new int[elementInfo.GenericTypeArguments.Length];
+                var indexes = new int[elementInfo.GenericTypeArguments.Length];
+                for (var i = 0; i < indexes.Length; i++)
+                {
+                    var argument = elementInfo.GenericTypeArguments[i];
+                    indexes[i] = argument.IsGenericParameter
+                        ? Array.IndexOf(parameter.Member.DeclaringType
+                            .GetTypeInfo()
+                            .GenericTypeParameters, argument)
+                        : -1;
+                }
+
+                // Factory
+                return type =>
+                {
+                    var typeInfo = type.GetTypeInfo();
+                    var types = new Type[indexes.Length];
                     for (var i = 0; i < indexes.Length; i++)
                     {
-                        var argument = elementInfo.GenericTypeArguments[i];
-                        indexes[i] = argument.IsGenericParameter
-                            ? Array.IndexOf(parameter.Member.DeclaringType
-                                                     .GetTypeInfo()
-                                                     .GenericTypeParameters, argument)
-                            : -1;
+                        var index = indexes[i];
+                        var newArgType = -1 == index
+                            ? elementInfo.GenericTypeArguments[i]
+                            : typeInfo.GenericTypeArguments[index];
+
+                        if (newArgType.GetTypeInfo().IsGenericTypeDefinition)
+                            throw new InvalidOperationException("Attempting to build open generic");
+
+                        types[i] = newArgType;
                     }
 
-                    // Factory
-                    return (Type type) =>
-                    {
-                        var typeInfo = type.GetTypeInfo();
-                        var types = new Type[indexes.Length];
-                        for (var i = 0; i < indexes.Length; i++)
-                        {
-                            var index = indexes[i];
-                            var newArgType = -1 == index
-                                           ? elementInfo.GenericTypeArguments[i]
-                                           : typeInfo.GenericTypeArguments[index];
+                    var elementType = elementInfo.IsGenericTypeDefinition
+                        ? elementInfo.MakeGenericType(types)
+                        : elementInfo.GetGenericTypeDefinition().MakeGenericType(types);
 
-                            if (newArgType.GetTypeInfo().IsGenericTypeDefinition)
-                                throw new InvalidOperationException("Attempting to build open generic");
+                    while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                            types[i] = newArgType;
-                        }
-
-                        var elementType = elementInfo.IsGenericTypeDefinition
-                                        ? elementInfo.MakeGenericType(types)
-                                        : elementInfo.GetGenericTypeDefinition().MakeGenericType(types);
-
-                        while (0 < depth--) elementType = elementType.MakeArrayType();
-
-                        // Resolver
-                        return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
-                    };
-                }
+                    // Resolver
+                    return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
+                };
             }
             if (elementInfo.IsGenericParameter)
             {
@@ -194,7 +190,7 @@ namespace Unity.Utility
                 int position = element.GenericParameterPosition;
 
                 // Factory
-                return (Type type) =>
+                return type =>
                 {
                     var elementType = type.GetTypeInfo().GenericTypeArguments[position];
                     while (0 < depth--) elementType = elementType.MakeArrayType();
@@ -203,38 +199,35 @@ namespace Unity.Utility
                     return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                 };
             }
-            else
-            {
-                // Factory
-                return (Type runtimeType) =>
-                {
-                    var elementType = element;
-                    while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                    // Resolver
-                    return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
-                };
-            }
+            // Factory
+            return runtimeType =>
+            {
+                var elementType = element;
+                while (0 < depth--) elementType = elementType.MakeArrayType();
+
+                // Resolver
+                return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
+            };
         }
 
-        /// <summary>
+        ///  <summary>
+        ///  
+        ///  </summary>
+        ///  <remarks>
+        ///  Member has generic parameters: 
         /// 
-        /// </summary>
-        /// <remarks>
-        /// Member has generic parameters: 
-        ///
-        ///  private class SomeClass{A, B, C, D}
-        ///      ...
-        ///      public SomeClass(DepClass{int, C} c)  --- (C)
-        /// </remarks>
-        /// <param name="parameter"></param>
-        /// <param name="info"></param>
-        /// <param name="declaringType"></param>
+        ///   private class SomeClass{A, B, C, D}
+        ///       ...
+        ///       public SomeClass(DepClass{int, C} c)  --- (C)
+        ///  </remarks>
+        ///  <param name="parameter"></param>
+        ///  <param name="info"></param>
         /// <param name="attribute"></param>
-        /// <returns></returns>
+        ///  <returns></returns>
         private static ResolveMethodFactory<Type> GenericToFactorry(this ParameterInfo parameter,
-                                                                   TypeInfo info,
-                                                                   DependencyResolutionAttribute attribute)
+                                                                         TypeInfo info,
+                                                                         DependencyResolutionAttribute attribute)
         {
             if (!info.ContainsGenericParameters)
             {
@@ -243,7 +236,7 @@ namespace Unity.Utility
                 // SomeClass(DepClass<int, string> c) 
 
                 // Factory            // Resolver  
-                return (Type type) => (ref ResolutionContext context) =>
+                return type => (ref ResolutionContext context) =>
                     context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
@@ -264,7 +257,7 @@ namespace Unity.Utility
             }
 
             // Factory
-            return (Type type) =>
+            return type =>
             {
                 var typeInfo = type.GetTypeInfo();
                 var types = new Type[indexes.Length];
