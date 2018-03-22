@@ -28,7 +28,5 @@ namespace Unity.Lifetime
         {
             return this;
         }
-
-        public override bool InUse { get => false; set => base.InUse = false; }
     }
 }

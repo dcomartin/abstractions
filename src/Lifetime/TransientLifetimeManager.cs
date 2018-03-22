@@ -10,12 +10,6 @@ namespace Unity.Lifetime
     {
         public static TransientLifetimeManager Instance = new TransientLifetimeManager();
 
-        public override bool InUse
-        {
-            get => false;
-            set { }
-        }
-
         /// <summary>
         /// Retrieve a value from the backing store associated with this Lifetime policy.
         /// </summary>

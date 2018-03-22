@@ -19,7 +19,7 @@ namespace Unity.Build.Injection
                         var position = parameter.Position;
                         return t =>
                         {
-                            var runtimeType = t.GenericTypeArguments[position];
+                            var runtimeType = t.GetTypeInfo().GenericTypeArguments[position];
 
                             if (type == runtimeType)
                                 return parameter.ToFactory()(t);

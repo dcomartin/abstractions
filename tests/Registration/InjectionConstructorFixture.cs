@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.Build.Pipeline;
-using Unity.Build.Selected;
-using Unity.Policy;
+using Unity.Build.Injection;
 using Unity.Registration;
+using Unity.Storage;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable RedundantExplicitArrayCreation
@@ -22,6 +21,19 @@ namespace Unity.Abstractions.Tests.Registration
 
         [TestInitialize]
         public void Setup() { _set = new TestData.TestPolicySet(); }
+
+        public static IEnumerable<object[]> TestDefaultConstructorInput
+        {
+            get
+            {
+                yield return new object[] { 0, typeof(object) };
+                yield return new object[] { 0, typeof(TestClass) };
+                yield return new object[] { 0, typeof(GenericTestClass<,,>) };
+                yield return new object[] { 0, typeof(GenericTestClass<int, string, object>) };
+                yield return new object[] { 0, typeof(GenericTestClass<,,>) };
+            }
+        }
+        
 
         public static IEnumerable<object[]> TestMethodInput
         {
@@ -65,20 +77,33 @@ namespace Unity.Abstractions.Tests.Registration
 
         #endregion
 
+
+        #region Tests
+
+        [DataTestMethod]
+        [DynamicData(nameof(TestDefaultConstructorInput))]
+        public void Abstractions_Registration_InjectionConstructor_DefaultConstructor(int test, Type type)
+        {
+            new InjectionConstructor().AddPolicies(type, null, null, _set);
+
+            var ctor = _set.Get<IInjectionConstructor>();
+            Assert.IsNotNull(ctor);
+
+            Assert.IsNotNull(ctor);
+            Assert.AreEqual(0, ctor.Constructor.GetParameters().Length);
+        }
+
         [DataTestMethod]
         [DynamicData(nameof(TestMethodInput))]
         public void Abstractions_Registration_InjectionConstructor(Type type, int index, object[] injects)
         {
             new InjectionConstructor(injects).AddPolicies(type, null, null, _set);
 
-            var selectConstructorPipeline = _set.Get<SelectConstructor>();
-            Assert.IsNotNull(selectConstructorPipeline);
-
-            var selectedConstructor = (SelectedConstructor)selectConstructorPipeline(type);
-            Assert.IsNotNull(selectedConstructor);
+            var injectionConstructor = _set.Get<IInjectionConstructor>();
+            Assert.IsNotNull(injectionConstructor);
 
             var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
-            Assert.AreEqual(ctor, selectedConstructor.Constructor);
+            Assert.AreEqual(ctor, injectionConstructor.Constructor);
         }
 
         [DataTestMethod]
@@ -107,29 +132,15 @@ namespace Unity.Abstractions.Tests.Registration
             Assert.IsFalse(ctorPtr.IsAlive);
             Assert.IsFalse(paramPtr.IsAlive);
 
-            var resolver = _set.Get<SelectConstructor>();
-            Assert.IsNotNull(resolver);
-
-            var selection = (SelectedConstructor)resolver(typeof(TestClass));
+            var selection = _set.Get<IInjectionConstructor>();
             Assert.IsNotNull(selection);
 
             var factory = selection.ResolveMethodFactory(typeof(TestClass));
             Assert.IsNotNull(factory);
         }
 
-        [TestMethod]
-        public void Abstractions_Registration_InjectionConstructor_DefaultConstructor()
-        {
-            new InjectionConstructor()
-                .AddPolicies(typeof(TestClass), null, null, _set);
+        #endregion
 
-            var resolver = _set.Get<SelectConstructor>();
-            Assert.IsNotNull(resolver);
-
-            var selection = (SelectedConstructor)resolver(typeof(TestClass));
-            Assert.IsNotNull(selection);
-            Assert.AreEqual(0, selection.Constructor.GetParameters().Length);
-        }
 
 
         #region Test Data
@@ -148,20 +159,25 @@ namespace Unity.Abstractions.Tests.Registration
             public TestClass(string first, string second, IUnityContainer third) { }  // 6
         }
 
-        public class GenericInjectionTestClass<TA, TB, TC>
+        public class GenericTestClass<TA, TB, TC>
         {
             public TB CollectionName { get; }
 
             public GenericDependencyClass<TA, TC> GenDependency { get; }
 
-            public GenericInjectionTestClass(TB name)
+            public GenericTestClass(TB name)
             {
                 CollectionName = name;
             }
 
-            public GenericInjectionTestClass(GenericDependencyClass<TA, TC> genericDependency)
+            public GenericTestClass(GenericDependencyClass<TA, TC> genericDependency)
             {
                 GenDependency = genericDependency;
+            }
+
+            public GenericTestClass()
+            {
+                
             }
         }
 

@@ -1,6 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved. See License.txt in the project root for license information.
-
-using Unity.Policy;
+﻿using Unity.Build.Policy;
 
 namespace Unity.Lifetime
 {
@@ -9,7 +7,7 @@ namespace Unity.Lifetime
     /// but also provides a signal to the default build plan, marking the type so that
     /// instances are reused across the build up object graph.
     /// </summary>
-    public class PerResolveLifetimeManager : LifetimeManager, IRequireBuildUpPolicy
+    public class PerResolveLifetimeManager : LifetimeManager, IRequireBuild
     {
         protected object value;
 

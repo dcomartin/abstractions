@@ -6,6 +6,7 @@ using Unity.Exceptions;
 using Unity.Lifetime;
 using Unity.Policy;
 using Unity.Resolution;
+using Unity.Storage;
 using Unity.Strategy;
 
 namespace Unity.Builder
@@ -198,7 +199,6 @@ namespace Unity.Builder
         public InternalPerResolveLifetimeManager(object value)
         {
             base.value = value;
-            InUse = true;
         }
     }
 }

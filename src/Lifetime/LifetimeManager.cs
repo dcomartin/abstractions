@@ -1,5 +1,4 @@
 ﻿using System;
-using Unity.Builder;
 
 namespace Unity.Lifetime
 {
@@ -9,9 +8,6 @@ namespace Unity.Lifetime
     /// </summary>
     public abstract class LifetimeManager : ILifetimePolicy, ILifetimeFactoryPolicy
     {
-        public virtual bool InUse { get; set; }
-
-
         #region ILifetimePolicy Members
 
         /// <summary>

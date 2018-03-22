@@ -81,6 +81,7 @@ namespace Unity.Registration
             return (ref ResolutionContext context) => method.Invoke(context.Existing, (object[])pipeline(ref context));
         };
 
+
         #endregion
     }
 }

@@ -2,6 +2,7 @@
 using Unity.Build.Pipeline;
 using Unity.Lifetime;
 using Unity.Policy;
+using Unity.Storage;
 
 namespace Unity.Build.Context
 {

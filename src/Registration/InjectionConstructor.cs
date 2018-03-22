@@ -5,7 +5,8 @@ using System.Reflection;
 using Unity.Build.Context;
 using Unity.Build.Factory;
 using Unity.Build.Injection;
-using Unity.Policy;
+using Unity.Build.Policy;
+using Unity.Storage;
 
 namespace Unity.Registration
 {
@@ -15,7 +16,8 @@ namespace Unity.Registration
     /// be configured to call this constructor.
     /// </summary>
     public class InjectionConstructor : InjectionMemberWithParameters<ConstructorInfo>, 
-                                        IInjectionConstructor
+                                        IInjectionConstructor,
+                                        IRequireBuild
     {
         #region Constructors
 

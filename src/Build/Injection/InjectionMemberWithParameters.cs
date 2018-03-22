@@ -10,12 +10,13 @@ using Unity.Registration;
 
 namespace Unity.Build.Injection
 {
-    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember, IResolveMethodFactory<Type>
+    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember, 
+                                                                           IResolveMethodFactory<Type>
                                                   where TMemberInfoType  : MethodBase
     {
         #region Fields
 
-        protected object[] Parameters { get; }
+        protected object[] Parameters { get; } // TODO: Name properly
         private TMemberInfoType _info;
 
         #endregion
@@ -164,7 +165,7 @@ namespace Unity.Build.Injection
             var matchInfo = match.GetTypeInfo();
 
             if (matchInfo.IsAssignableFrom(typeInfo)) return true;
-            if ((typeInfo.IsArray || typeof(Array).Equals(type)) &&
+            if ((typeInfo.IsArray || typeof(Array) == type) &&
                 (matchInfo.IsArray || match == typeof(Array)))
                 return true;
 
@@ -182,7 +183,7 @@ namespace Unity.Build.Injection
 
         protected string ErrorMessage(Type type, string format)
         {
-            string signature = string.Join(", ", _info.GetParameters().Select(p => p?.ToString() ?? "null"));
+            string signature = string.Join(", ", Parameters.Select(p => p?.ToString() ?? "null"));
             return string.Format(CultureInfo.CurrentCulture, format, type.Name, signature);
         }
 

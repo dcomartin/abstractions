@@ -66,7 +66,7 @@ namespace Unity.Lifetime
             {
                 _containerContext.Lifetime.Add(lifetime);
             }
-            lifetime.InUse = true;
+
             return lifetime;
         }
 
