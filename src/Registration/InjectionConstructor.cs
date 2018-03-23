@@ -16,7 +16,6 @@ namespace Unity.Registration
     /// be configured to call this constructor.
     /// </summary>
     public class InjectionConstructor : InjectionMemberWithParameters<ConstructorInfo>, 
-                                        IInjectionConstructor,
                                         IRequireBuild
     {
         #region Constructors
@@ -71,7 +70,7 @@ namespace Unity.Registration
             if (null == MemberInfo)
                 throw new InvalidOperationException(ErrorMessage(type, Constants.NoSuchConstructor));
 
-            policies.Set(typeof(IInjectionConstructor), this);
+            policies.Set(typeof(InjectionConstructor), this);
         }
 
         #endregion
@@ -103,6 +102,7 @@ namespace Unity.Registration
                 break;
             }
 
+            //var array = type.GetConstructors();
             var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
             return (ref ResolutionContext context) => ctor.Invoke((object[])pipeline(ref context));
         };

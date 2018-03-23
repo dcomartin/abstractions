@@ -5,6 +5,9 @@ namespace Unity.Storage
 {
     public interface IPolicySet
     {
+        // TODO: Add proper summary
+        void Add(Type policyInterface, object policy);
+
         /// <summary>
         /// Get policy
         /// </summary>
@@ -14,7 +17,6 @@ namespace Unity.Storage
 
         // TODO: Add proper summary
         object Get(Type type, string name, Type policyInterface);
-
 
         /// <summary>
         /// Set policy
@@ -36,7 +38,7 @@ namespace Unity.Storage
         void Clear(Type type, string name, Type policyInterface);
 
 
-        IEnumerable<object> OfType<T>();
+        IEnumerable<object> OfType<T>(bool exactMatch = false);
     }
 
 

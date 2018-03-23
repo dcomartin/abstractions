@@ -38,7 +38,7 @@ namespace Unity.ResolverPolicy
         }
 
         /// <summary>
-        /// Resolve the value for a dependency.
+        /// ResolveMethod the value for a dependency.
         /// </summary>
         /// <param name="context">Current build context.</param>
         /// <returns>An array populated with the results of resolving the resolver policies.</returns>

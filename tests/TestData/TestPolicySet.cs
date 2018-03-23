@@ -8,6 +8,11 @@ namespace Unity.Abstractions.Tests.TestData
     {
         public IDictionary<Type, object> Dictionary { get; } = new Dictionary<Type, object>();
 
+        public void Add(Type policyInterface, object policy)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Clear(Type policyInterface)
         {
             Dictionary.Remove(policyInterface);
@@ -28,7 +33,7 @@ namespace Unity.Abstractions.Tests.TestData
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> OfType<T>()
+        public IEnumerable<object> OfType<T>(bool exactMatch = false)
         {
             throw new NotImplementedException();
         }

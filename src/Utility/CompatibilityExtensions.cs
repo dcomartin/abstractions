@@ -52,6 +52,8 @@ namespace System.Reflection
 
         public int GenericParameterPosition => _type.GenericParameterPosition;
 
+        public bool IsConstructedGenericType => _type.IsGenericType && !_type.ContainsGenericParameters;
+
     #region moved over from Type
 
         //// Fields
@@ -202,8 +204,16 @@ namespace System.Reflection
 #endif
 
 
-    internal static class IntrospectionExtensions
+    internal static class CompatibilityExtensions
     {
+#if NETSTANDARD1_0
+        public static System.Reflection.ConstructorInfo[] GetConstructors(this System.Type type)
+        {
+            var ctors = type.GetTypeInfo().DeclaredConstructors;
+            return ctors is ConstructorInfo[] array ? array : ctors.ToArray();
+        }
+#endif
+
 #if NET40
         public static Attribute GetCustomAttribute(this ParameterInfo parameter, Type type)
         {

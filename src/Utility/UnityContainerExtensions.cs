@@ -588,10 +588,10 @@ namespace Unity
 
         #endregion
 
-        #region Resolve overloads
+        #region ResolveMethod overloads
 
         /// <summary>
-        /// Resolve an instance of the default requested type from the container.
+        /// ResolveMethod an instance of the default requested type from the container.
         /// </summary>
         /// <typeparam name="T"><see cref="Type"/> of object to get from the container.</typeparam>
         /// <param name="container">Container to resolve from.</param>
@@ -603,7 +603,7 @@ namespace Unity
         }
 
         /// <summary>
-        /// Resolve an instance of the requested type with the given name from the container.
+        /// ResolveMethod an instance of the requested type with the given name from the container.
         /// </summary>
         /// <typeparam name="T"><see cref="Type"/> of object to get from the container.</typeparam>
         /// <param name="container">Container to resolve from.</param>
@@ -616,7 +616,7 @@ namespace Unity
         }
 
         /// <summary>
-        /// Resolve an instance of the default requested type from the container.
+        /// ResolveMethod an instance of the default requested type from the container.
         /// </summary>
         /// <param name="container">Container to resolve from.</param>
         /// <param name="t"><see cref="Type"/> of object to get from the container.</param>
@@ -771,7 +771,7 @@ namespace Unity
         }
 
         /// <summary>
-        /// Resolve access to a configuration interface exposed by an extension.
+        /// ResolveMethod access to a configuration interface exposed by an extension.
         /// </summary>
         /// <remarks>Extensions can expose configuration interfaces as well as adding
         /// strategies and policies to the container. This method walks the list of

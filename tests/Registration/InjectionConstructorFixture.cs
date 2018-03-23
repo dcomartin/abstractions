@@ -86,7 +86,7 @@ namespace Unity.Abstractions.Tests.Registration
         {
             new InjectionConstructor().AddPolicies(type, null, null, _set);
 
-            var ctor = _set.Get<IInjectionConstructor>();
+            var ctor = _set.Get<InjectionConstructor>();
             Assert.IsNotNull(ctor);
 
             Assert.IsNotNull(ctor);
@@ -99,7 +99,7 @@ namespace Unity.Abstractions.Tests.Registration
         {
             new InjectionConstructor(injects).AddPolicies(type, null, null, _set);
 
-            var injectionConstructor = _set.Get<IInjectionConstructor>();
+            var injectionConstructor = _set.Get<InjectionConstructor>();
             Assert.IsNotNull(injectionConstructor);
 
             var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
@@ -132,7 +132,7 @@ namespace Unity.Abstractions.Tests.Registration
             Assert.IsFalse(ctorPtr.IsAlive);
             Assert.IsFalse(paramPtr.IsAlive);
 
-            var selection = _set.Get<IInjectionConstructor>();
+            var selection = _set.Get<InjectionConstructor>();
             Assert.IsNotNull(selection);
 
             var factory = selection.ResolveMethodFactory(typeof(TestClass));

@@ -45,7 +45,7 @@ namespace Unity
         IUnityContainer RegisterInstance(Type type, string name, object instance, LifetimeManager lifetime);
 
         /// <summary>
-        /// Resolve an instance of the requested type with the given name typeFrom the container.
+        /// ResolveMethod an instance of the requested type with the given name typeFrom the container.
         /// </summary>
         /// <param name="type"><see cref="Type"/> of object to get typeFrom the container.</param>
         /// <param name="name">Name of the object to retrieve.</param>
@@ -79,7 +79,7 @@ namespace Unity
         IUnityContainer AddExtension(UnityContainerExtension extension);
 
         /// <summary>
-        /// Resolve access to a configuration interface exposed by an extension.
+        /// ResolveMethod access to a configuration interface exposed by an extension.
         /// </summary>
         /// <remarks>Extensions can expose configuration interfaces as well as adding
         /// strategies and policies to the container. This method walks the list of

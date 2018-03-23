@@ -10,9 +10,9 @@ namespace Unity.Build.Factory
         public static T BuildPipeline<T>(this IList<PipelineFactoryDelegate<T>> list)
         {
             T method = default(T);
-            foreach (PipelineFactoryDelegate<T>  factory in list)
+            for (var i = list.Count - 1; i > -1; --i)
             {
-                method = factory(method);
+                method = list[i](method);
             }
             return method;
         }
