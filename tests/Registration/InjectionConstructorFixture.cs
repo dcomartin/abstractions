@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.Build.Injection;
 using Unity.Registration;
 using Unity.Storage;
 
@@ -33,7 +32,18 @@ namespace Unity.Abstractions.Tests.Registration
                 yield return new object[] { 0, typeof(GenericTestClass<,,>) };
             }
         }
-        
+
+        public static IEnumerable<object[]> TestConstructorInfoInput
+        {
+            get
+            {
+                yield return new object[] { 0,                                typeof(object).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0] };
+                yield return new object[] { 1,                             typeof(TestClass).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0] };
+                yield return new object[] { 2,                  typeof(GenericTestClass<,,>).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0] };
+                yield return new object[] { 3, typeof(GenericTestClass<int, string, object>).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0] };
+                yield return new object[] { 4,                  typeof(GenericTestClass<,,>).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0] };
+            }
+        }
 
         public static IEnumerable<object[]> TestMethodInput
         {
@@ -80,6 +90,7 @@ namespace Unity.Abstractions.Tests.Registration
 
         #region Tests
 
+
         [DataTestMethod]
         [DynamicData(nameof(TestDefaultConstructorInput))]
         public void Abstractions_Registration_InjectionConstructor_DefaultConstructor(int test, Type type)
@@ -92,6 +103,16 @@ namespace Unity.Abstractions.Tests.Registration
             Assert.IsNotNull(ctor);
             Assert.AreEqual(0, ctor.Constructor.GetParameters().Length);
         }
+
+
+        [DataTestMethod]
+        [DynamicData(nameof(TestConstructorInfoInput))]
+        public void Abstractions_Registration_InjectionConstructor_ConstructorInfo(int test, ConstructorInfo info)
+        {
+            var ctor = new InjectionConstructor(info);
+            Assert.IsNotNull(ctor);
+        }
+
 
         [DataTestMethod]
         [DynamicData(nameof(TestMethodInput))]
@@ -114,6 +135,7 @@ namespace Unity.Abstractions.Tests.Registration
             new InjectionConstructor(injects).AddPolicies(null, null, implementation, _set);
         }
 
+        [Ignore]
         [TestMethod]
         public void Abstractions_Registration_InjectionConstructor_garbage_collected()
         {
@@ -135,7 +157,7 @@ namespace Unity.Abstractions.Tests.Registration
             var selection = _set.Get<InjectionConstructor>();
             Assert.IsNotNull(selection);
 
-            var factory = selection.ResolveMethodFactory(typeof(TestClass));
+            var factory = selection.Resolver(typeof(TestClass));
             Assert.IsNotNull(factory);
         }
 

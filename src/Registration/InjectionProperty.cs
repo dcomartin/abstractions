@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Unity.Build.Factory;
-using Unity.Build.Injection;
+using Unity.Build.Pipeline;
 using Unity.Builder;
 using Unity.Builder.Policy;
 using Unity.Policy;
@@ -17,7 +16,7 @@ namespace Unity.Registration
     /// and will configure the container accordingly.
     /// </summary>
     //[DebuggerDisplay("InjectionParameter:  Name={_propertyName},  Value={ParameterValue}")]
-    public class InjectionProperty : InjectionMember, IInjectionProperty
+    public class InjectionProperty : InjectionMember
     {
         private readonly string _propertyName;
         // TODO:
@@ -87,7 +86,7 @@ namespace Unity.Registration
 
         #region IInjectionProperty
 
-        public ResolveMethodFactory<Type> ResolveMethodFactory => throw new NotImplementedException();
+        public PipelineFactory<Type, ResolveMethod> ResolveMethodFactory => throw new NotImplementedException();
 
         #endregion
 

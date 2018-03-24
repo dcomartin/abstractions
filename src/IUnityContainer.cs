@@ -17,14 +17,14 @@ namespace Unity
         /// Register a type mapping with the container, where the created instances will use
         /// the given <see cref="LifetimeManager"/>.
         /// </summary>
-        /// <param name="typeFrom"><see cref="Type"/> that will be requested.</param>
-        /// <param name="typeTo"><see cref="Type"/> that will actually be returned.</param>
+        /// <param name="registeredType"><see cref="Type"/> that will be requested.</param>
         /// <param name="name">Name to use for registration, null if a default registration.</param>
+        /// <param name="mappedTo"><see cref="Type"/> that will actually be returned.</param>
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects. Can be null.</param>
         /// <returns>The <see cref="IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
-        IUnityContainer RegisterType(Type typeFrom, Type typeTo, string name, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers);
+        IUnityContainer RegisterType(Type registeredType, string name, Type mappedTo, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers);
 
         /// <summary>
         /// Register an instance with the container.
@@ -45,9 +45,9 @@ namespace Unity
         IUnityContainer RegisterInstance(Type type, string name, object instance, LifetimeManager lifetime);
 
         /// <summary>
-        /// ResolveMethod an instance of the requested type with the given name typeFrom the container.
+        /// ResolveMethod an instance of the requested type with the given name registeredType the container.
         /// </summary>
-        /// <param name="type"><see cref="Type"/> of object to get typeFrom the container.</param>
+        /// <param name="type"><see cref="Type"/> of object to get registeredType the container.</param>
         /// <param name="name">Name of the object to retrieve.</param>
         /// <param name="resolverOverrides">Any overrides for the resolve call.</param>
         /// <returns>The retrieved object.</returns>
@@ -58,18 +58,18 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is useful when you don'type control the construction of an
+        /// This method is useful when you don't control the construction of an
         /// instance (ASP.NET pages or objects created via XAML, for instance)
         /// but you still want properties and other injection performed.
         /// </para></remarks>
         /// <param name="type"><see cref="Type"/> of object to perform injection on.</param>
-        /// <param name="existing">Instance to build up.</param>
         /// <param name="name">name to use when looking up the TypeMappings and other configurations.</param>
+        /// <param name="existing">Instance to build up.</param>
         /// <param name="resolverOverrides">Any overrides for the resolve calls.</param>
         /// <returns>The resulting object. By default, this will be <paramref name="existing"/>, but
         /// container extensions may add things like automatic proxy creation which would
         /// cause this to return a different object (but still type compatible with <paramref name="type"/>).</returns>
-        object BuildUp(Type type, object existing, string name, params ResolverOverride[] resolverOverrides);
+        object BuildUp(Type type, string name, object existing, params ResolverOverride[] resolverOverrides);
 
         /// <summary>
         /// Add an extension object to the container.
@@ -92,7 +92,7 @@ namespace Unity
         /// <summary>
         /// The parent of this container.
         /// </summary>
-        /// <value>The parent container, or null if this container doesn'type have one.</value>
+        /// <value>The parent container, or null if this container doesn't have one.</value>
         IUnityContainer Parent { get; }
 
         /// <summary>
@@ -104,7 +104,12 @@ namespace Unity
         /// <returns>The new child container.</returns>
         IUnityContainer CreateChildContainer();
 
-        // TODO: Add summary
+        /// <summary>
+        /// Checks if type has been registered
+        /// </summary>
+        /// <param name="type"><see cref="Type"/> to check</param>
+        /// <param name="name">Name of the registration (Optional)</param>
+        /// <returns>True if type has been registered</returns>
         bool IsRegistered(Type type, string name);
 
         /// <summary>

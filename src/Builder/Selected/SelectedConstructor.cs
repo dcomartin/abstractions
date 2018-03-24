@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Unity.Build.Context;
 using Unity.Build.Factory;
+using Unity.Build.Pipeline;
 
 namespace Unity.Build.Selected
 {
@@ -40,7 +41,7 @@ namespace Unity.Build.Selected
         public ConstructorInfo Constructor => MemberInfo;
 
 
-        public override ResolveMethodFactory<Type> ResolveMethodFactory => (Type type) => 
+        public override PipelineFactory<Type, ResolveMethod> ResolveMethodFactory => (Type type) => 
         {
             var pipeline = base.ResolveMethodFactory(type);
 

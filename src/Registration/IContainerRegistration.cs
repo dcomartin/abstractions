@@ -22,7 +22,7 @@ namespace Unity.Registration
 
         /// <summary>
         /// The type that this registration is mapped to. If no type mapping was done, the
-        /// <see cref="INamedType.RegisteredType"/> property and this one will have the same value.
+        /// <see cref="RegisteredType"/> property and this one will have the same value.
         /// </summary>
         Type MappedToType { get; }
 

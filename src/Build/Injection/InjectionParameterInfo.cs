@@ -3,13 +3,15 @@ using System.Reflection;
 using Unity.Attributes;
 using Unity.Build.Context;
 using Unity.Build.Factory;
+using Unity.Build.Pipeline;
+using Unity.Build.Policy;
 
 namespace Unity.Build.Injection
 {
     public static class InjectionParameterInfo
     {
 
-        public static ResolveMethodFactory<Type> ToFactory(this ParameterInfo parameter, object arg)
+        public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter, object arg)
         {
             switch (arg)
             {
@@ -35,8 +37,8 @@ namespace Unity.Build.Injection
                         return t => (ref ResolutionContext context) => type;
 
 
-                case IResolveMethodFactory<ParameterInfo> factory:
-                    var pipeline = factory.ResolveMethodFactory(parameter);
+                case IResolve<ParameterInfo> factory:
+                    var pipeline = factory.Resolver(parameter);
                     return runtime => pipeline;
 
                 default:
@@ -48,8 +50,8 @@ namespace Unity.Build.Injection
         /// Crates factory method for specific type
         /// </summary>
         /// <param name="parameter">Parameter info to process</param>
-        /// <returns>Pipeline facotory method</returns>
-        public static ResolveMethodFactory<Type> ToFactory(this ParameterInfo parameter)
+        /// <returns>Pipeline factory method</returns>
+        public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter)
         {
             var attribute = (DependencyResolutionAttribute)parameter.GetCustomAttribute(typeof(DependencyResolutionAttribute));
             var info = parameter.ParameterType.GetTypeInfo();
@@ -96,9 +98,9 @@ namespace Unity.Build.Injection
         /// <param name="info"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        private static ResolveMethodFactory<Type> ArrayToFactory(this ParameterInfo parameter, 
-                                                                      TypeInfo info,
-                                                                      DependencyResolutionAttribute attribute)
+        private static PipelineFactory<Type, ResolveMethod> ArrayToFactory(this ParameterInfo parameter, 
+                                                                                TypeInfo info,
+                                                                                DependencyResolutionAttribute attribute)
         {
 
             var depth = 0;
@@ -225,9 +227,9 @@ namespace Unity.Build.Injection
         ///  <param name="info"></param>
         /// <param name="attribute"></param>
         ///  <returns></returns>
-        private static ResolveMethodFactory<Type> GenericToFactorry(this ParameterInfo parameter,
-                                                                         TypeInfo info,
-                                                                         DependencyResolutionAttribute attribute)
+        private static PipelineFactory<Type, ResolveMethod> GenericToFactorry(this ParameterInfo parameter,
+                                                                                   TypeInfo info,
+                                                                                   DependencyResolutionAttribute attribute)
         {
             if (!info.ContainsGenericParameters)
             {

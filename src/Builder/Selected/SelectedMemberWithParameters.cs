@@ -12,7 +12,7 @@ namespace Unity.Build.Selected
     /// Base class for return of selector policies that need
     /// to keep track of a set of parameter resolvers.
     /// </summary>
-    public class SelectedMemberWithParameters : IResolveMethodFactory<Type>
+    public class SelectedMemberWithParameters 
     {
         #region Constructors
 
@@ -26,7 +26,7 @@ namespace Unity.Build.Selected
             }
             else
             {
-                var factories = new ResolveMethodFactory<Type>[length];
+                var factories = new PipelineFactory<Type, ResolveMethod>[length];
 
                 for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
 
@@ -55,13 +55,13 @@ namespace Unity.Build.Selected
             }
             else
             {
-                var factories = new ResolveMethodFactory<Type>[length];
+                var factories = new PipelineFactory<Type, ResolveMethod>[length];
 
                 if (null == members || 0 == members.Length)
                     for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
                 else
                 {
-                    Debug.Assert(length == members.Length, "Number of InjectionMembers and paremeters are different.");
+                    Debug.Assert(length == members.Length, "Number of InjectionMembers and parameters are different.");
                     for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(members[f]);
                 }
 
@@ -85,7 +85,7 @@ namespace Unity.Build.Selected
 
         #region Factory
 
-        public virtual ResolveMethodFactory<Type> ResolveMethodFactory { get; }
+        public virtual PipelineFactory<Type, ResolveMethod> ResolveMethodFactory { get; }
 
         #endregion
     }

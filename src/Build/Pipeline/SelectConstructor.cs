@@ -1,12 +1,8 @@
 ﻿using System;
-using Unity.Build.Factory;
+using Unity.Registration;
 
 namespace Unity.Build.Pipeline
 {
-    public delegate IResolveMethodFactory<Type> SelectConstructor(Type type);
+    public delegate InjectionConstructor SelectConstructorPipeline(IUnityContainer container, Type type);
 
-    public interface ISelectConstructor
-    {
-        IResolveMethodFactory<Type> SelectConstructor { get; }
-    }
 }

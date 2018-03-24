@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using Unity.Build.Context;
 using Unity.Build.Factory;
 using Unity.Build.Injection;
+using Unity.Build.Pipeline;
 using Unity.Build.Policy;
 using Unity.Storage;
 
@@ -32,7 +31,7 @@ namespace Unity.Registration
         /// Create a new instance of <see cref="InjectionConstructor"/> that looks
         /// for a constructor with the given set of parameters.
         /// </summary>
-        /// <param name="args">The args for the parameters, that will
+        /// <param name="args">The arguments for the parameters, that will
         /// be converted to <see cref="InjectionParameterValue"/> objects.</param>
         public InjectionConstructor(params object[] args)
             : base(args)
@@ -40,14 +39,14 @@ namespace Unity.Registration
         }
 
         public InjectionConstructor(ConstructorInfo info)
-            : base(info)
         {
+            MemberInfo = info;
         }
 
         #endregion
 
 
-        #region Register Pipeline
+        #region Add Policy
 
         public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet policies)
         {
@@ -76,36 +75,22 @@ namespace Unity.Registration
         #endregion
 
 
-        #region IInjectionConstructor
+        #region InjectionMemberWithParameters
 
         public ConstructorInfo Constructor => MemberInfo;
 
-        public override ResolveMethodFactory<Type> ResolveMethodFactory => type =>
+        protected override PipelineFactory<Type, ResolveMethod> CreateResolverFactory()
         {
-
-            var pipeline = base.ResolveMethodFactory(type);
-
-            if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
-            {
-                var constructorInfo = MemberInfo;
-                return (ref ResolutionContext context) => constructorInfo.Invoke((object[])pipeline(ref context));
-            }
-
-            Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
-            // TODO: optimize for already selected
-
-            var index = -1;
-            foreach (var member in MemberInfo.DeclaringType.GetTypeInfo().DeclaredConstructors)
-            {
-                index += 1;
-                if (MemberInfo != member) continue;
-                break;
-            }
-
-            //var array = type.GetConstructors();
-            var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
-            return (ref ResolutionContext context) => ctor.Invoke((object[])pipeline(ref context));
-        };
+            var dependencies = base.CreateResolverFactory();
+            if (null == dependencies)
+                return type => (ref ResolutionContext context) => MemberInfo.Invoke(null);
+            else
+                return type =>
+                {
+                    var resolver = dependencies(type);
+                    return (ref ResolutionContext context) => MemberInfo.Invoke((object[])resolver(ref context));
+                };
+        }
 
         #endregion
     }

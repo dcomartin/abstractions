@@ -10,14 +10,14 @@ using Unity.Registration;
 
 namespace Unity.Build.Injection
 {
-    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember, 
-                                                                           IResolveMethodFactory<Type>
+    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember // TODO: Remove this 
+                                                                                           //, IResolveMethodFactory<Type>
                                                   where TMemberInfoType  : MethodBase
     {
         #region Fields
 
-        protected object[] Parameters { get; } // TODO: Name properly
-        private TMemberInfoType _info;
+        private TMemberInfoType   _info;
+        private readonly object[] _data;
 
         #endregion
 
@@ -30,24 +30,13 @@ namespace Unity.Build.Injection
 
         protected InjectionMemberWithParameters(object[] members)
         {
-            Parameters = members;
-        }
-
-        protected InjectionMemberWithParameters(TMemberInfoType memberInfo)
-        {
-            MemberInfo = memberInfo;
-        }
-
-        protected InjectionMemberWithParameters(TMemberInfoType memberInfo, object[] members)
-        {
-            Parameters = members;
-            MemberInfo = memberInfo;
+            _data = members;
         }
 
         #endregion
 
 
-        #region Member Info
+        #region Members
 
         protected TMemberInfoType MemberInfo
         {
@@ -55,50 +44,12 @@ namespace Unity.Build.Injection
             set
             {
                 Debug.Assert(null == _info, "Member Info could only be set once");
-                _info = value;
 
-                ParameterInfo[] parameters = _info.GetParameters();
+                _info = value ?? throw new InvalidOperationException("Member Info can not be null");
 
-                var length = parameters.Length;
-                if (0 == length)
-                {
-                    var array = new object[0];
-                    ResolveMethodFactory = type => (ref ResolutionContext context) => array;
-                }
-                else
-                {
-                    var factories = new ResolveMethodFactory<Type>[length];
-
-                    if (null == Parameters || 0 == Parameters.Length)
-                        for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
-                    else
-                    {
-                        Debug.Assert(length == Parameters.Length, "Number of InjectionMembers and paremeters are different.");
-                        for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(Parameters[f]);
-                    }
-
-                    ResolveMethodFactory = type =>
-                    {
-                        var resolvers = new ResolveMethod[length];
-                        for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
-
-                        return (ref ResolutionContext context) =>
-                        {
-                            var values = new object[length];
-                            for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
-                            return values;
-                        };
-                    };
-                }
+                Resolver = CreateResolverFactory();
             }
         }
-
-        #endregion
-
-
-        #region IResolveMethodFactory
-
-        public virtual ResolveMethodFactory<Type> ResolveMethodFactory { get; private set; }
 
         #endregion
 
@@ -108,11 +59,11 @@ namespace Unity.Build.Injection
         protected virtual bool Matches(ParameterInfo[] parameters)
         {
             // TODO: optimize
-            if ((Parameters?.Length ?? 0) != parameters.Length) return false;
+            if ((_data?.Length ?? 0) != parameters.Length) return false;
 
-            for (var i = 0; i < (Parameters?.Length ?? 0); i++)
+            for (var i = 0; i < (_data?.Length ?? 0); i++)
             {
-                if (Matches(Parameters?[i], parameters[i].ParameterType))
+                if (Matches(_data?[i], parameters[i].ParameterType))
                     continue;
 
                 return false;
@@ -181,9 +132,47 @@ namespace Unity.Build.Injection
 
         #region Implementation
 
+        protected virtual PipelineFactory<Type, ResolveMethod> CreateResolverFactory()
+        {
+            var parameters = _info.GetParameters();
+            var length = parameters.Length;
+
+            if (0 == length)
+            {
+                return type => null;
+            }
+            else
+            {
+                var factories = new PipelineFactory<Type, ResolveMethod>[length];
+
+                if (null == _data || 0 == _data.Length)
+                    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
+                else
+                {
+                    Debug.Assert(length == _data.Length, "Number of InjectionMembers and parameters are different.");
+                    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(_data[f]);
+                }
+
+                return type =>
+                {
+                    var resolvers = new ResolveMethod[length];
+                    for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
+
+                    return (ref ResolutionContext context) =>
+                    {
+                        var values = new object[length];
+                        for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
+                        return values;
+                    };
+                };
+            }
+        }
+
+
+        // TODO: Optimize it out
         protected string ErrorMessage(Type type, string format)
         {
-            string signature = string.Join(", ", Parameters.Select(p => p?.ToString() ?? "null"));
+            string signature = string.Join(", ", _data.Select(p => p?.ToString() ?? "null"));
             return string.Format(CultureInfo.CurrentCulture, format, type.Name, signature);
         }
 

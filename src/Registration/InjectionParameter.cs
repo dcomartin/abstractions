@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Reflection;
 using Unity.Build.Context;
 using Unity.Build.Factory;
+using Unity.Build.Pipeline;
+using Unity.Build.Policy;
 using Unity.Policy;
 
 namespace Unity.Registration
@@ -12,7 +15,7 @@ namespace Unity.Registration
     /// the required resolver when the declaring type is instantiated.
     /// </summary>
     [DebuggerDisplay("InjectionParameter:  Type={ParameterType?.Name},  Value={ParameterValue}")]
-    public class InjectionParameter : IResolveMethodFactory<ParameterInfo>
+    public class InjectionParameter : IResolve<ParameterInfo>
     {
         #region Constructors
 
@@ -25,7 +28,8 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = type;
-            ResolveMethodFactory = (ParameterInfo info) => (ref ResolutionContext context) => type;
+            Resolver = (ParameterInfo info) => (ref ResolutionContext context) => type;
+            Expression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -38,7 +42,8 @@ namespace Unity.Registration
         {
             ParameterValue = value;
             ParameterType = value is Type ? typeof(Type) : value?.GetType();
-            ResolveMethodFactory = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            Resolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            Expression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -51,7 +56,8 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = value ?? throw new ArgumentNullException(nameof(value));
-            ResolveMethodFactory = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            Resolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            Expression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         #endregion
@@ -69,7 +75,19 @@ namespace Unity.Registration
         /// </summary>
         public virtual object ParameterValue { get; }
 
-        public ResolveMethodFactory<ParameterInfo> ResolveMethodFactory { get; protected set; }
+        #endregion
+
+
+        #region IResolve
+
+        public PipelineFactory<ParameterInfo, ResolveMethod> Resolver { get; }
+
+        public PipelineFactory<ParameterInfo, Expression> Expression { get; }
+
+        #endregion
+
+
+
 
         /// <summary>
         /// Test if this parameter matches type.
@@ -101,7 +119,6 @@ namespace Unity.Registration
             return false;
         }
 
-        #endregion
 
 
         /// <summary>
@@ -111,6 +128,7 @@ namespace Unity.Registration
         /// <param name="typeToBuild">Type that contains the member that needs this parameter. Used
         /// to resolve open generic parameters.</param>
         /// <returns>The <see cref="IResolverPolicy"/>.</returns>
+        // TODO: Remove
         public virtual IResolverPolicy GetResolverPolicy(Type typeToBuild)
         {
             throw new NotImplementedException(); // TODO:
