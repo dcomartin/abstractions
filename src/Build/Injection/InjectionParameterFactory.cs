@@ -8,7 +8,7 @@ using Unity.Build.Policy;
 
 namespace Unity.Build.Injection
 {
-    public static class InjectionParameterInfo
+    public static class InjectionParameterFactory
     {
 
         public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter, object arg)
@@ -105,7 +105,7 @@ namespace Unity.Build.Injection
 
             var depth = 0;
             var element = parameter.ParameterType;
-            while (element.IsArray)
+            while (element != null && element.IsArray)
             {
                 depth += 1;
                 element = element.GetElementType();

@@ -6,7 +6,6 @@ using Unity.Build.Context;
 using Unity.Build.Factory;
 using Unity.Build.Pipeline;
 using Unity.Build.Policy;
-using Unity.Policy;
 
 namespace Unity.Registration
 {
@@ -117,22 +116,6 @@ namespace Unity.Registration
                 return true;
 
             return false;
-        }
-
-
-
-        /// <summary>
-        /// Return a <see cref="IResolverPolicy"/> instance that will
-        /// return this types value for the parameter.
-        /// </summary>
-        /// <param name="typeToBuild">Type that contains the member that needs this parameter. Used
-        /// to resolve open generic parameters.</param>
-        /// <returns>The <see cref="IResolverPolicy"/>.</returns>
-        // TODO: Remove
-        public virtual IResolverPolicy GetResolverPolicy(Type typeToBuild)
-        {
-            throw new NotImplementedException(); // TODO:
-            //return new LiteralValueDependencyResolverPolicy(Value);
         }
     }
 

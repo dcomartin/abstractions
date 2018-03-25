@@ -32,13 +32,14 @@ namespace Unity.Resolution
         /// <returns>a <see cref="IResolverPolicy"/> object if this override applies, null if not.</returns>
         public override IResolverPolicy GetResolver(IBuilderContext context, Type dependencyType)
         {
-            if ((context ?? throw new ArgumentNullException(nameof(context))).CurrentOperation is ParameterResolveOperation currentOperation &&
-                currentOperation.ParameterName == Name)
-            {
-                return Value.GetResolverPolicy(dependencyType);
-            }
+            throw new NotImplementedException(); // TODO: Fix
+            //if ((context ?? throw new ArgumentNullException(nameof(context))).CurrentOperation is ParameterResolveOperation currentOperation &&
+            //    currentOperation.ParameterName == Name)
+            //{
+            //    return Value.GetResolverPolicy(dependencyType);
+            //}
 
-            return null;
+            //return null;
         }
     }
 }

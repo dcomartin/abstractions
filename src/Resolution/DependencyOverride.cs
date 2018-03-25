@@ -34,12 +34,13 @@ namespace Unity.Resolution
         /// <returns>a <see cref="IResolverPolicy"/> object if this override applies, null if not.</returns>
         public override IResolverPolicy GetResolver(IBuilderContext context, Type dependencyType)
         {
-            IResolverPolicy result = null;
-            if (dependencyType == _typeToConstruct)
-            {
-                result = Value.GetResolverPolicy(dependencyType);
-            }
-            return result;
+            throw new NotImplementedException(); // TODO: Fix
+            //IResolverPolicy result = null;
+            //if (dependencyType == _typeToConstruct)
+            //{
+            //    result = Value.GetResolverPolicy(dependencyType);
+            //}
+            //return result;
         }
     }
 

@@ -41,21 +41,22 @@ namespace Unity.Builder.Policy
         /// that contain the properties to set.</returns>
         public IEnumerable<SelectedProperty> SelectProperties(IBuilderContext context, IPolicyList resolverPolicyDestination)
         {
-            Type typeToBuild = context.BuildKey.Type;
-            foreach (Tuple<PropertyInfo, InjectionParameterValue> pair in _propertiesAndValues)
-            {
-                var currentProperty = pair.Item1;
-                var info = pair.Item1.DeclaringType.GetTypeInfo();
+            throw new NotImplementedException(); // TODO: Fix
+            //Type typeToBuild = context.BuildKey.Type;
+            //foreach (Tuple<PropertyInfo, InjectionParameterValue> pair in _propertiesAndValues)
+            //{
+            //    var currentProperty = pair.Item1;
+            //    var info = pair.Item1.DeclaringType.GetTypeInfo();
 
-                // Is this the property info on the open generic? If so, get the one
-                // for the current closed generic.
-                if (info.IsGenericType && info.ContainsGenericParameters)
-                {
-                    currentProperty = context.BuildKey.Type.GetTypeInfo().GetDeclaredProperty(currentProperty.Name);
-                }
+            //    // Is this the property info on the open generic? If so, get the one
+            //    // for the current closed generic.
+            //    if (info.IsGenericType && info.ContainsGenericParameters)
+            //    {
+            //        currentProperty = context.BuildKey.Type.GetTypeInfo().GetDeclaredProperty(currentProperty.Name);
+            //    }
 
-                yield return new SelectedProperty(currentProperty, pair.Item2.GetResolverPolicy(typeToBuild));
-            }
+            //    yield return new SelectedProperty(currentProperty, pair.Item2.GetResolverPolicy(typeToBuild));
+            //}
         }
     }
 }

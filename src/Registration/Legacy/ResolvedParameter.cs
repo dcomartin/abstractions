@@ -44,7 +44,7 @@ namespace Unity.Registration
         /// <param name="type">Type that contains the member that needs this parameter. Used
         /// to resolve open generic parameters.</param>
         /// <returns>The <see cref="IResolverPolicy"/>.</returns>
-        public override IResolverPolicy GetResolverPolicy(Type type)
+        public IResolverPolicy GetResolverPolicy(Type type)
         {
             var typeToBuild = type ?? throw new ArgumentNullException(nameof(type));
             if (ParameterType.IsArray && ParameterType.GetElementType().GetTypeInfo().IsGenericParameter)

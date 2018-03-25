@@ -14,7 +14,7 @@ namespace Unity.Registration
     /// for a constructor, so that the container can
     /// be configured to call this constructor.
     /// </summary>
-    public class InjectionConstructor : InjectionMemberWithParameters<ConstructorInfo>, 
+    public class InjectionConstructor : InjectionMemberWithParameters<ConstructorInfo>,
                                         IRequireBuild
     {
         #region Constructors
@@ -82,13 +82,45 @@ namespace Unity.Registration
         protected override PipelineFactory<Type, ResolveMethod> CreateResolverFactory()
         {
             var dependencies = base.CreateResolverFactory();
-            if (null == dependencies)
-                return type => (ref ResolutionContext context) => MemberInfo.Invoke(null);
-            else
+            if (MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
+            {
+                var constructors = MemberInfo.DeclaringType?.GetConstructors() ?? new ConstructorInfo[0];
+                var index = Array.IndexOf(constructors, MemberInfo);
                 return type =>
                 {
-                    var resolver = dependencies(type);
-                    return (ref ResolutionContext context) => MemberInfo.Invoke((object[])resolver(ref context));
+                    var resolver = dependencies?.Invoke(type);
+                    var ctor = type.GetConstructors()[index];
+                    return (ref ResolutionContext context) =>
+                    {
+                        try
+                        {
+                            return ctor.Invoke((object[])resolver?.Invoke(ref context));
+                        }
+                        catch (Exception e)
+                        {
+                            // TODO: Add proper error message
+                            throw new InvalidOperationException($"Error creating type {type}", e);
+                        }
+                    };
+                };
+            }
+
+            return type =>
+                {
+                    var resolver = dependencies?.Invoke(type);
+                    return (ref ResolutionContext context) =>
+                    {
+                        try
+                        {
+                            return MemberInfo.Invoke((object[])resolver?.Invoke(ref context));
+                        }
+                        catch (Exception e)
+                        {
+                            // TODO: Add proper error message
+                            throw new InvalidOperationException($"Error creating type {type}", e);
+                        }
+
+                    };
                 };
         }
 

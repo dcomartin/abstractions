@@ -39,14 +39,14 @@ namespace Unity.Extension
         /// The strategies this container uses.
         /// </summary>
         /// <value>The <see cref="IStagedStrategyChain{TStrategyType,TStageEnum}"/> that the container uses to build objects.</value>
-        public abstract IStagedStrategyChain<BuilderStrategy, UnityBuildStage> Strategies { get; }
+        public virtual IStagedStrategyChain<BuilderStrategy, UnityBuildStage> Strategies { get; }
 
         /// <summary>
         /// The strategies this container uses to construct build plans.
         /// </summary>
         /// <value>The <see cref="IStagedStrategyChain{TStrategyType,TStageEnum}"/> that this container uses when creating
         /// build plans.</value>
-        public abstract IStagedStrategyChain<BuilderStrategy, BuilderStage> BuildPlanStrategies { get; }
+        public virtual IStagedStrategyChain<BuilderStrategy, BuilderStage> BuildPlanStrategies { get; }
 
         #endregion
 
