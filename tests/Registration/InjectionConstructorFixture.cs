@@ -164,7 +164,6 @@ namespace Unity.Abstractions.Tests.Registration
         #endregion
 
 
-
         #region Test Data
 
         // ReSharper disable UnusedMember.Local

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
-using Unity.Build.Context;
-using Unity.Build.Factory;
-using Unity.Build.Injection;
 using Unity.Build.Pipeline;
 
-namespace Unity.Build.Selected
+namespace Unity.Builder.Selected
 {
     /// <summary>
     /// Base class for return of selector policies that need
@@ -18,66 +14,66 @@ namespace Unity.Build.Selected
 
         protected SelectedMemberWithParameters(ParameterInfo[] parameters)
         {
-            var length = parameters.Length;
-            if (0 == length)
-            {
-                var array = new object[0];
-                ResolveMethodFactory = type => (ref ResolutionContext context) => array;
-            }
-            else
-            {
-                var factories = new PipelineFactory<Type, ResolveMethod>[length];
+            //var length = parameters.Length;
+            //if (0 == length)
+            //{
+            //    var array = new object[0];
+            //    ResolveMethodFactory = type => (ref ResolutionContext context) => array;
+            //}
+            //else
+            //{
+            //    var factories = new PipelineFactory<Type, ResolveMethod>[length];
 
-                for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
+            //    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
 
-                ResolveMethodFactory = type =>
-                {
-                    var resolvers = new ResolveMethod[length];
-                    for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
+            //    ResolveMethodFactory = type =>
+            //    {
+            //        var resolvers = new ResolveMethod[length];
+            //        for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
 
-                    return (ref ResolutionContext context) =>
-                    {
-                        var values = new object[length];
-                        for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
-                        return values;
-                    };
-                };
-            }
+            //        return (ref ResolutionContext context) =>
+            //        {
+            //            var values = new object[length];
+            //            for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
+            //            return values;
+            //        };
+            //    };
+            //}
         }
 
         protected SelectedMemberWithParameters(ParameterInfo[] parameters, object[] members)
         {
-            var length = parameters.Length;
-            if (0 == length)
-            {
-                var array = new object[0];
-                ResolveMethodFactory = type => (ref ResolutionContext context) => array;
-            }
-            else
-            {
-                var factories = new PipelineFactory<Type, ResolveMethod>[length];
+            //var length = parameters.Length;
+            //if (0 == length)
+            //{
+            //    var array = new object[0];
+            //    ResolveMethodFactory = type => (ref ResolutionContext context) => array;
+            //}
+            //else
+            //{
+            //    var factories = new PipelineFactory<Type, ResolveMethod>[length];
 
-                if (null == members || 0 == members.Length)
-                    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
-                else
-                {
-                    Debug.Assert(length == members.Length, "Number of InjectionMembers and parameters are different.");
-                    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(members[f]);
-                }
+            //    if (null == members || 0 == members.Length)
+            //        for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
+            //    else
+            //    {
+            //        Debug.Assert(length == members.Length, "Number of InjectionMembers and parameters are different.");
+            //        for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(members[f]);
+            //    }
 
-                ResolveMethodFactory = type =>
-                {
-                    var resolvers = new ResolveMethod[length];
-                    for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
+            //    ResolveMethodFactory = type =>
+            //    {
+            //        var resolvers = new ResolveMethod[length];
+            //        for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
 
-                    return (ref ResolutionContext context) =>
-                    {
-                        var values = new object[length];
-                        for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
-                        return values;
-                    };
-                };
-            }
+            //        return (ref ResolutionContext context) =>
+            //        {
+            //            var values = new object[length];
+            //            for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
+            //            return values;
+            //        };
+            //    };
+            //}
         }
 
         #endregion

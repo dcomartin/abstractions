@@ -2,13 +2,12 @@
 using System.Reflection;
 using Unity.Attributes;
 using Unity.Build.Context;
-using Unity.Build.Factory;
 using Unity.Build.Pipeline;
 using Unity.Build.Policy;
 
-namespace Unity.Build.Injection
+namespace Unity.Build.Parameters
 {
-    public static class InjectionParameterFactory
+    public static class ParameterFactory
     {
 
         public static PipelineFactory<Type, ResolveMethod> ToFactory__(this ParameterInfo parameter, object arg)

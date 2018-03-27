@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Unity.Build.Context;
-using Unity.Build.Factory;
 using Unity.Build.Pipeline;
+using Unity.Builder.Selected;
 
 namespace Unity.Build.Selected
 {

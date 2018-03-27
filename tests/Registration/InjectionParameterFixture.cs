@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Unity.Build.Injection;
+using Unity.Build.Parameters;
 using Unity.Registration;
 
 namespace Unity.Abstractions.Tests.Registration

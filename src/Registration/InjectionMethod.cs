@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Unity.Build.Injection;
+using Unity.Build.Parameters;
 
 namespace Unity.Registration
 {

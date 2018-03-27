@@ -4,14 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Unity.Build.Context;
-using Unity.Build.Factory;
 using Unity.Build.Pipeline;
 using Unity.Registration;
 
-namespace Unity.Build.Injection
+namespace Unity.Build.Parameters
 {
-    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember // TODO: Remove this 
-                                                                                           //, IResolveMethodFactory<Type>
+    public abstract class InjectionMemberWithParameters<TMemberInfoType> : InjectionMember
                                                   where TMemberInfoType  : MethodBase
     {
         #region Fields
