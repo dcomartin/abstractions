@@ -94,7 +94,8 @@ namespace Unity.Registration
                     {
                         try
                         {
-                            return ctor.Invoke((object[])resolver?.Invoke(ref context));
+                            var args = (object[]) resolver?.Invoke(ref context);
+                            return ctor.Invoke(args);
                         }
                         catch (Exception e)
                         {

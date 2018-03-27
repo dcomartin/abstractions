@@ -97,13 +97,13 @@ namespace Unity.Registration
         {
             if (null == ParameterType) return true;
 
-            var thisInfo = (typeof(Type).Equals(ParameterType) ? ((Type)ParameterValue) 
-                                                            : ParameterType).GetTypeInfo();
+            var thisInfo = (typeof(Type) == ParameterType ? (Type)ParameterValue 
+                                                          : ParameterType).GetTypeInfo();
             var typeInfo = type.GetTypeInfo();
 
             if (typeInfo.IsAssignableFrom(thisInfo)) return true;
-            if ((thisInfo.IsArray || typeof(Array).Equals(ParameterType) || 
-                (typeof(Type).Equals(ParameterType) && typeof(Array).Equals(ParameterValue))) && 
+            if ((thisInfo.IsArray || typeof(Array) == ParameterType || 
+                typeof(Type) == ParameterType && typeof(Array).Equals(ParameterValue)) && 
                 (typeInfo.IsArray || type == typeof(Array)))
                 return true;
 

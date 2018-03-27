@@ -137,35 +137,33 @@ namespace Unity.Build.Injection
             var parameters = _info.GetParameters();
             var length = parameters.Length;
 
-            if (0 == length)
-            {
+            if (0 == length)            // No parameters
                 return type => null;
-            }
+
+            // Create resolve factories
+            var factories = new PipelineFactory<Type, ResolveMethod>[length];
+
+
+            if (null == _data || 0 == _data.Length)
+                for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
             else
             {
-                var factories = new PipelineFactory<Type, ResolveMethod>[length];
-
-                if (null == _data || 0 == _data.Length)
-                    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
-                else
-                {
-                    Debug.Assert(length == _data.Length, "Number of InjectionMembers and parameters are different.");
-                    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(_data[f]);
-                }
-
-                return type =>
-                {
-                    var resolvers = new ResolveMethod[length];
-                    for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
-
-                    return (ref ResolutionContext context) =>
-                    {
-                        var values = new object[length];
-                        for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
-                        return values;
-                    };
-                };
+                Debug.Assert(length == _data.Length, "Number of InjectionMembers and parameters are different.");
+                for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory(_data[f]);
             }
+
+            return type =>
+            {
+                var resolvers = new ResolveMethod[length];
+                for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
+
+                return (ref ResolutionContext context) =>
+                {
+                    var values = new object[length];
+                    for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
+                    return values;
+                };
+            };
         }
 
 

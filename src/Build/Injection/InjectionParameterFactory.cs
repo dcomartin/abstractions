@@ -11,7 +11,7 @@ namespace Unity.Build.Injection
     public static class InjectionParameterFactory
     {
 
-        public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter, object arg)
+        public static PipelineFactory<Type, ResolveMethod> ToFactory__(this ParameterInfo parameter, object arg)
         {
             switch (arg)
             {
@@ -29,6 +29,10 @@ namespace Unity.Build.Injection
                             return (ref ResolutionContext context) => type;
                         };
                     }
+                    else if (parameter.ParameterType.GetTypeInfo().IsGenericType)
+                    {
+                        throw new NotImplementedException();
+                    }
                     else if (parameter.ParameterType == type)
                     {
                         return parameter.ToFactory();
@@ -44,6 +48,37 @@ namespace Unity.Build.Injection
                 default:
                     return parameter.ToFactory();
             }
+        }
+
+        public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter, object arg)
+        {
+            var attribute = (DependencyResolutionAttribute)parameter.GetCustomAttribute(typeof(DependencyResolutionAttribute));
+            var info = parameter.ParameterType.GetTypeInfo();
+
+            if (info.IsArray) return parameter.ArrayToFactory(info, attribute);
+
+            if (info.IsGenericType) return parameter.GenericToFactorry(info, attribute);
+
+            if (!info.ContainsGenericParameters)
+            {
+                // Simple type
+
+                // Factory            // Resolver
+                return type => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
+            }
+
+            // Parameter of generic type:
+            //  private class SomeClass<A, B, C, D>
+            //  {
+            //      public SomeClass(B b) <--- (B)
+            //      ...
+            //  }
+
+            var index = info.GenericParameterPosition;
+
+            // Factory            // Resolver
+            return type => (ref ResolutionContext context) =>
+                context.Resolve(type.GetTypeInfo().GenericTypeArguments[index], attribute?.Name);
         }
 
         /// <summary>
@@ -130,7 +165,11 @@ namespace Unity.Build.Injection
                     return type =>
                     {
                         var elementType = element;
-                        while (0 < depth--) elementType = elementType.MakeArrayType();
+                        while (0 < depth--)
+                        {
+                            elementType = elementType?.MakeArrayType() ?? 
+                                          throw new InvalidOperationException();
+                        }
 
                         // Resolver
                         return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
