@@ -149,7 +149,7 @@ namespace Unity.Build.Parameters
 
             if (elementInfo.IsGenericType)
             {
-                // Open generic parameters in dependency:
+                // Open generic parameters in @delegate:
                 //  {
                 //      public SomeClass(DepClass<A, C, int> c) <--- (A, C)
                 //  }
@@ -174,7 +174,7 @@ namespace Unity.Build.Parameters
                         return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                     };
                 }
-                // Open generic parameters in dependency:
+                // Open generic parameters in @delegate:
                 //  {
                 //      public SomeClass(DepClass<A, C, int> c) <--- (A, C)
                 //  }
@@ -280,7 +280,7 @@ namespace Unity.Build.Parameters
                     context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
-            // Open generic parameters in dependency:
+            // Open generic parameters in @delegate:
             //  {
             //      public SomeClass(DepClass<A, C, int> c) <--- (A, C)
             //  }

@@ -5,7 +5,6 @@ using System.Reflection;
 using Unity.Build.Context;
 using Unity.Build.Pipeline;
 using Unity.Builder.Selected;
-using Unity.Policy;
 
 namespace Unity.Build.Selected
 {
@@ -36,27 +35,29 @@ namespace Unity.Build.Selected
 
         public override PipelineFactory<Type, ResolveMethod> ResolveMethodFactory => (type) =>
         {
-            var pipeline = base.ResolveMethodFactory(type);
+            // TODO: Fix
+            throw new NotImplementedException();
+            //var pipeline = base.ResolveMethodFactory(type);
 
-            if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
-            {
-                var methodInfo = MemberInfo;
-                return (ref ResolutionContext context) => methodInfo.Invoke(context.Existing, (object[])pipeline(ref context));
-            }
+            //if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
+            //{
+            //    var methodInfo = MemberInfo;
+            //    return (ref ResolutionContext context) => methodInfo.Invoke(context.Existing, (object[])pipeline(ref context));
+            //}
 
-            Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
+            //Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
 
-            // TODO: Check if create info from Generic Type Definition is faster
-            var index = -1;
-            foreach (var member in MemberInfo.DeclaringType.GetTypeInfo().DeclaredMethods)
-            {
-                index += 1;
-                if (MemberInfo != member) continue;
-                break;
-            }
+            //// TODO: Check if create info from Generic Type Definition is faster
+            //var index = -1;
+            //foreach (var member in MemberInfo.DeclaringType.GetTypeInfo().DeclaredMethods)
+            //{
+            //    index += 1;
+            //    if (MemberInfo != member) continue;
+            //    break;
+            //}
 
-            var method = type.GetTypeInfo().DeclaredMethods.ElementAt(index);
-            return (ref ResolutionContext context) => method.Invoke(context.Existing, (object[])pipeline(ref context));
+            //var method = type.GetTypeInfo().DeclaredMethods.ElementAt(index);
+            //return (ref ResolutionContext context) => method.Invoke(context.Existing, (object[])pipeline(ref context));
         };
     }
 }

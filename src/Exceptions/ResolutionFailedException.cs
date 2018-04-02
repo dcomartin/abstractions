@@ -10,7 +10,7 @@ namespace Unity.Exceptions
 {
     /// <summary>
     /// The exception thrown by the Unity container when
-    /// an attempt to resolve a dependency fails.
+    /// an attempt to resolve a @delegate fails.
     /// </summary>
     public partial class ResolutionFailedException : Exception
     {

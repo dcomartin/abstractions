@@ -121,9 +121,9 @@ namespace Unity.Builder
 
         /// <summary>
         /// GetOrDefault a <see cref="IResolverPolicy"/> object for the given <paramref name="dependencyType"/>
-        /// or null if that dependency hasn't been overridden.
+        /// or null if that @delegate hasn't been overridden.
         /// </summary>
-        /// <param name="dependencyType">Type of the dependency.</param>
+        /// <param name="dependencyType">Type of the @delegate.</param>
         /// <returns>Resolver to use, or null if no override matches for the current operation.</returns>
         IResolverPolicy GetOverriddenResolver(Type dependencyType);
 

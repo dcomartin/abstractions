@@ -8,7 +8,7 @@ using Unity.Resolution;
 namespace Unity
 {
     /// <summary>
-    /// Interface defining the behavior of the Unity dependency injection container.
+    /// Interface defining the behavior of the Unity @delegate injection container.
     /// </summary>
     [CLSCompliant(true)]
     public interface IUnityContainer : IDisposable
@@ -52,24 +52,6 @@ namespace Unity
         /// <param name="resolverOverrides">Any overrides for the resolve call.</param>
         /// <returns>The retrieved object.</returns>
         object Resolve(Type type, string name, params ResolverOverride[] resolverOverrides);
-
-        /// <summary>
-        /// Run an existing object through the container and perform injection on it.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This method is useful when you don't control the construction of an
-        /// instance (ASP.NET pages or objects created via XAML, for instance)
-        /// but you still want properties and other injection performed.
-        /// </para></remarks>
-        /// <param name="type"><see cref="Type"/> of object to perform injection on.</param>
-        /// <param name="name">name to use when looking up the TypeMappings and other configurations.</param>
-        /// <param name="existing">Instance to build up.</param>
-        /// <param name="resolverOverrides">Any overrides for the resolve calls.</param>
-        /// <returns>The resulting object. By default, this will be <paramref name="existing"/>, but
-        /// container extensions may add things like automatic proxy creation which would
-        /// cause this to return a different object (but still type compatible with <paramref name="type"/>).</returns>
-        object BuildUp(Type type, string name, object existing, params ResolverOverride[] resolverOverrides);
 
         /// <summary>
         /// Add an extension object to the container.

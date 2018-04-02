@@ -8,7 +8,7 @@ namespace Unity.ResolverPolicy
 {
     /// <summary>
     /// An implementation of <see cref="IResolverPolicy"/> that
-    /// calls back into the build chain to build up the dependency, passing
+    /// calls back into the build chain to build up the @delegate, passing
     /// a type given at compile time as its build key.
     /// </summary>
     public class FixedTypeResolverPolicy : IResolverPolicy
@@ -27,10 +27,10 @@ namespace Unity.ResolverPolicy
         #region IResolverPolicy Members
 
         /// <summary>
-        /// GetOrDefault the value for a dependency.
+        /// GetOrDefault the value for a @delegate.
         /// </summary>
         /// <param name="context">Current build context.</param>
-        /// <returns>The value for the dependency.</returns>
+        /// <returns>The value for the @delegate.</returns>
         public object Resolve(IBuilderContext context)
         {
             return (context ?? throw new ArgumentNullException(nameof(context))).NewBuildUp(_keyToBuild.Type, _keyToBuild.Name);

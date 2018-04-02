@@ -28,7 +28,7 @@ namespace Unity
         public const string MarkerBuildPlanInvoked = "The override marker build plan policy has been invoked. This should never happen, looks like a bug in the container.";
         public const string MethodArgumentResolveOperation = "Resolving parameter '{0}' of method {1}.{2}";
         public const string MethodParameterResolutionFailed = "The value for parameter '{1}' of method {0} could not be resolved. ";
-        public const string MissingDependency = "Could not resolve dependency for build key {0}.";
+        public const string MissingDependency = "Could not resolve @delegate for build key {0}.";
         public const string MultipleInjectionConstructors = "The type {0} has multiple constructors marked with the InjectionConstructor attribute. Unable to disambiguate.";
         public const string MustHaveOpenGenericType = "The supplied type {0} must be an open generic type.";
         public const string MustHaveSameNumberOfGenericArguments = "The supplied type {0} does not have the same number of generic arguments as the target type {1}.";
@@ -46,8 +46,8 @@ namespace Unity
         public const string PropertyTypeMismatch = "The property {0} on type {1} is of type {2}, and cannot be injected with a value of type {3}.";
         public const string PropertyValueResolutionFailed = "The value for the property '{0}' could not be resolved.";
         public const string ProvidedStringArgMustNotBeEmpty = "The provided string argument must not be empty.";
-        public const string ResolutionFailed = "Resolution of the dependency failed, type = '{0}', name = '{1}'.\nException occurred while: {2}.\nException is: {3} - {4}\n-----------------------------------------------\nAt the time of the exception, the container was: ";
-        public const string FactoryResolutionFailed = "Resolution of the DelegateInjectionFactory method dependency failed, type = '{0}', name = '{1}'.";
+        public const string ResolutionFailed = "Resolution of the @delegate failed, type = '{0}', name = '{1}'.\nException occurred while: {2}.\nException is: {3} - {4}\n-----------------------------------------------\nAt the time of the exception, the container was: ";
+        public const string FactoryResolutionFailed = "Resolution of the DelegateInjectionFactory method @delegate failed, type = '{0}', name = '{1}'.";
         public const string ResolutionTraceDetail = "Resolving {0},{1}";
         public const string ResolutionWithMappingTraceDetail = "Resolving {0},{1} (mapped from {2}, {3})";
         public const string ResolvingPropertyValueOperation = "Resolving value for property {0}.{1}";

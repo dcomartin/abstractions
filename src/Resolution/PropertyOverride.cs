@@ -23,10 +23,10 @@ namespace Unity.Resolution
 
         /// <summary>
         /// Return a <see cref="IResolverPolicy"/> that can be used to give a value
-        /// for the given desired dependency.
+        /// for the given desired @delegate.
         /// </summary>
         /// <param name="context">Current build context.</param>
-        /// <param name="dependencyType">Type of dependency desired.</param>
+        /// <param name="dependencyType">Type of @delegate desired.</param>
         /// <returns>a <see cref="IResolverPolicy"/> object if this override applies, null if not.</returns>
         public override IResolverPolicy GetResolver(IBuilderContext context, Type dependencyType)
         {

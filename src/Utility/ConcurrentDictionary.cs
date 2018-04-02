@@ -45,7 +45,7 @@ namespace System.Collections.Concurrent
 
         private readonly bool _growLockArray; // Whether to dynamically increase the size of the striped lock
 
-        // How many times we resized becaused of collisions. 
+        // How many times we resized because of collisions. 
         // This is used to make sure we don't resize the dictionary because of multi-threaded Add() calls
         // that generate collisions. Whenever a GrowTable() should be the only place that changes this
         private int _keyRehashCount;

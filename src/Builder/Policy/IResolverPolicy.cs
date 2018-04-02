@@ -12,7 +12,7 @@ namespace Unity.Policy
         /// GetOrDefault the value
         /// </summary>
         /// <param name="context">Current build context.</param>
-        /// <returns>The value for the dependency.</returns>
+        /// <returns>The value for the @delegate.</returns>
         object Resolve(IBuilderContext context);
     }
 }

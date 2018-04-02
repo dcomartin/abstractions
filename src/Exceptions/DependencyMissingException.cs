@@ -6,7 +6,7 @@ using System.Globalization;
 namespace Unity.Exceptions
 {
     /// <summary>
-    /// Represents that a dependency could not be resolved.
+    /// Represents that a @delegate could not be resolved.
     /// </summary>
     public class DependencyMissingException : Exception
     {

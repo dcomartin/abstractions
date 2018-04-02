@@ -9,7 +9,7 @@ namespace Unity.Registration
     /// <summary>
     /// A <see cref="InjectionParameterValue"/> that can be passed to
     /// <see cref="IUnityContainer.RegisterType"/> to configure a
-    /// parameter or property as an optional dependency.
+    /// parameter or property as an optional @delegate.
     /// </summary>
     public class OptionalParameter : TypedInjectionValue
     {
@@ -19,7 +19,7 @@ namespace Unity.Registration
         /// Construct a new <see cref="OptionalParameter"/> object that
         /// specifies the given <paramref name="type"/>.
         /// </summary>
-        /// <param name="type">Type of the dependency.</param>
+        /// <param name="type">Type of the @delegate.</param>
         public OptionalParameter(Type type)
             : this(type, null)
         {
@@ -29,7 +29,7 @@ namespace Unity.Registration
         /// Construct a new <see cref="OptionalParameter"/> object that
         /// specifies the given <paramref name="type"/> and <paramref name="name"/>.
         /// </summary>
-        /// <param name="type">Type of the dependency.</param>
+        /// <param name="type">Type of the @delegate.</param>
         /// <param name="name">Name for the dependency.</param>
         public OptionalParameter(Type type, string name)
             : base(type, null)
@@ -59,9 +59,9 @@ namespace Unity.Registration
 
     /// <summary>
     /// A generic version of <see cref="OptionalParameter"></see> that lets you
-    /// specify the type of the dependency using generics syntax.
+    /// specify the type of the @delegate using generics syntax.
     /// </summary>
-    /// <typeparam name="T">Type of the dependency.</typeparam>
+    /// <typeparam name="T">Type of the @delegate.</typeparam>
     public class OptionalParameter<T> : OptionalParameter
     {
         /// <summary>
@@ -76,7 +76,7 @@ namespace Unity.Registration
         /// Construct a new <see cref="OptionalParameter{T}"/> with the given
         /// <paramref name="name"/>.
         /// </summary>
-        /// <param name="name">Name of the dependency.</param>
+        /// <param name="name">Name of the @delegate.</param>
         public OptionalParameter(string name)
             : base(typeof(T), name)
         {

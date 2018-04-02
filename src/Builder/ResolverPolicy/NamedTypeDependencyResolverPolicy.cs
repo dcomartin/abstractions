@@ -26,10 +26,10 @@ namespace Unity.ResolverPolicy
         }
 
         /// <summary>
-        /// ResolveMethod the value for a dependency.
+        /// ResolveMethod the value for a @delegate.
         /// </summary>
         /// <param name="context">Current build context.</param>
-        /// <returns>The value for the dependency.</returns>
+        /// <returns>The value for the @delegate.</returns>
         public object Resolve(IBuilderContext context)
         {
             return (context ?? throw new ArgumentNullException(nameof(context)))

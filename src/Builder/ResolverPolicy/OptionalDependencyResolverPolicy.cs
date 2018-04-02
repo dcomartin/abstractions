@@ -57,10 +57,10 @@ namespace Unity.ResolverPolicy
         #region IResolverPolicy Members
 
         /// <summary>
-        /// GetOrDefault the value for a dependency.
+        /// GetOrDefault the value for a @delegate.
         /// </summary>
         /// <param name="context">Current build context.</param>
-        /// <returns>The value for the dependency.</returns>
+        /// <returns>The value for the @delegate.</returns>
         public object Resolve(IBuilderContext context)
         {
             try

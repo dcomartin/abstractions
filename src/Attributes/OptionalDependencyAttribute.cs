@@ -4,7 +4,7 @@ using Unity.Policy;
 namespace Unity.Attributes
 {
     /// <summary>
-    /// An <see cref="DependencyResolutionAttribute"/> used to mark a dependency
+    /// An <see cref="DependencyResolutionAttribute"/> used to mark a @delegate
     /// as optional - the container will try to resolve it, and return null
     /// if the resolution fails rather than throw.
     /// </summary>
@@ -21,9 +21,9 @@ namespace Unity.Attributes
 
         /// <summary>
         /// Construct a new <see cref="OptionalDependencyAttribute"/> object that
-        /// specifies a named dependency.
+        /// specifies a named @delegate.
         /// </summary>
-        /// <param name="name">Name of the dependency.</param>
+        /// <param name="name">Name of the @delegate.</param>
         public OptionalDependencyAttribute(string name)
         {
             Name = name;
