@@ -157,7 +157,7 @@ namespace Unity.Abstractions.Tests.Registration
             var selection = _set.Get<InjectionConstructor>();
             Assert.IsNotNull(selection);
 
-            var factory = selection.Resolver(typeof(TestClass));
+            var factory = selection.CreateActivator(typeof(TestClass));
             Assert.IsNotNull(factory);
         }
 

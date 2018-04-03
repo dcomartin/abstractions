@@ -45,7 +45,7 @@ namespace Unity.Build.Parameters
 
                 _info = value ?? throw new InvalidOperationException("Member Info can not be null");
 
-                Resolver = CreateResolverFactory();
+                CreateActivator = CreateResolverFactory();
             }
         }
 

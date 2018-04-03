@@ -13,7 +13,7 @@ namespace Unity.Registration
     /// the required resolver when the declaring type is instantiated.
     /// </summary>
     [DebuggerDisplay("InjectionParameter:  Type={ParameterType?.Name},  Value={ParameterValue}")]
-    public class InjectionParameter : IResolve<ParameterInfo>
+    public class InjectionParameter : IPipelineFactory<ParameterInfo>
     {
         #region Constructors
 
@@ -26,8 +26,8 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = type;
-            Resolver = (ParameterInfo info) => (ref ResolutionContext context) => type;
-            Expression = (ParameterInfo info) => throw new NotImplementedException();
+            CreateActivator = (ParameterInfo info) => (ref ResolutionContext context) => type;
+            CreateExpression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -40,8 +40,8 @@ namespace Unity.Registration
         {
             ParameterValue = value;
             ParameterType = value is Type ? typeof(Type) : value?.GetType();
-            Resolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
-            Expression = (ParameterInfo info) => throw new NotImplementedException();
+            CreateActivator = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            CreateExpression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = value ?? throw new ArgumentNullException(nameof(value));
-            Resolver = (ParameterInfo info) => (ref ResolutionContext context) => value;
-            Expression = (ParameterInfo info) => throw new NotImplementedException();
+            CreateActivator = (ParameterInfo info) => (ref ResolutionContext context) => value;
+            CreateExpression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         #endregion
@@ -76,11 +76,11 @@ namespace Unity.Registration
         #endregion
 
 
-        #region IResolve
+        #region IPipelineFactory
 
-        public PipelineFactory<ParameterInfo, ResolveMethod> Resolver { get; }
+        public PipelineFactory<ParameterInfo, ResolveMethod> CreateActivator { get; }
 
-        public PipelineFactory<ParameterInfo, Expression> Expression { get; }
+        public PipelineFactory<ParameterInfo, Expression> CreateExpression { get; }
 
         #endregion
 

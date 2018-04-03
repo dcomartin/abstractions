@@ -10,7 +10,7 @@ namespace Unity.Registration
     /// Base class for objects that can be used to configure what
     /// class members get injected by the container.
     /// </summary>
-    public abstract class InjectionMember : IResolve<Type>
+    public abstract class InjectionMember : IPipelineFactory<Type>
     {
         /// <summary>
         /// Allows injection member to inject necessary policies into registration
@@ -24,14 +24,14 @@ namespace Unity.Registration
         }
 
 
-        #region IResolve
+        #region IPipelineFactory
 
         // Create protectively
-        public virtual PipelineFactory<Type, ResolveMethod> Resolver { get; protected set; } = data => throw new InvalidOperationException(Constants.InvalidMember);   
+        public virtual PipelineFactory<Type, ResolveMethod> CreateActivator { get; protected set; } = data => throw new InvalidOperationException(Constants.InvalidMember);   
         // TODO: Replace it with abstract
 
         // Create lazy
-        public virtual PipelineFactory<Type, Expression> Expression { get; protected set; }
+        public virtual PipelineFactory<Type, Expression> CreateExpression { get; protected set; }
 
         #endregion
 

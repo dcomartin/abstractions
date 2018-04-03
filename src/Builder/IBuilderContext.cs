@@ -124,7 +124,7 @@ namespace Unity.Builder
         /// or null if that @delegate hasn't been overridden.
         /// </summary>
         /// <param name="dependencyType">Type of the @delegate.</param>
-        /// <returns>Resolver to use, or null if no override matches for the current operation.</returns>
+        /// <returns>CreateActivator to use, or null if no override matches for the current operation.</returns>
         IResolverPolicy GetOverriddenResolver(Type dependencyType);
 
         /// <summary>

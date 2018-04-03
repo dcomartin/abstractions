@@ -3,5 +3,5 @@ using Unity.Storage;
 
 namespace Unity.Build.Pipeline
 {
-    public delegate void RegisterPipeline(ILifetimeContainer container, IPolicySet registration, params object[] args);
+    public delegate ResolveMethod RegisterPipeline(ILifetimeContainer lifetimeContainer, IPolicySet registration, params object[] args);
 }

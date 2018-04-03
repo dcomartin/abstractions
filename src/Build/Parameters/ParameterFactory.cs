@@ -40,8 +40,8 @@ namespace Unity.Build.Parameters
                         return t => (ref ResolutionContext context) => type;
 
 
-                case IResolve<ParameterInfo> factory:
-                    var pipeline = factory.Resolver(parameter);
+                case IPipelineFactory<ParameterInfo> factory:
+                    var pipeline = factory.CreateActivator(parameter);
                     return runtime => pipeline;
 
                 default:
@@ -62,7 +62,7 @@ namespace Unity.Build.Parameters
             {
                 // Simple type
 
-                // Factory            // Resolver
+                // Factory            // CreateActivator
                 return type => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
@@ -75,7 +75,7 @@ namespace Unity.Build.Parameters
 
             var index = info.GenericParameterPosition;
 
-            // Factory            // Resolver
+            // Factory            // CreateActivator
             return type => (ref ResolutionContext context) =>
                 context.Resolve(type.GetTypeInfo().GenericTypeArguments[index], attribute?.Name);
         }
@@ -98,7 +98,7 @@ namespace Unity.Build.Parameters
             {
                 // Simple type
 
-                // Factory            // Resolver
+                // Factory            // CreateActivator
                 return type => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
@@ -111,7 +111,7 @@ namespace Unity.Build.Parameters
 
             var index = info.GenericParameterPosition;
 
-            // Factory            // Resolver
+            // Factory            // CreateActivator
             return type => (ref ResolutionContext context) =>
                 context.Resolve(type.GetTypeInfo().GenericTypeArguments[index], attribute?.Name);
         }
@@ -170,7 +170,7 @@ namespace Unity.Build.Parameters
                                           throw new InvalidOperationException();
                         }
 
-                        // Resolver
+                        // CreateActivator
                         return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                     };
                 }
@@ -214,7 +214,7 @@ namespace Unity.Build.Parameters
 
                     while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                    // Resolver
+                    // CreateActivator
                     return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                 };
             }
@@ -235,7 +235,7 @@ namespace Unity.Build.Parameters
                     var elementType = type.GetTypeInfo().GenericTypeArguments[position];
                     while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                    // Resolver
+                    // CreateActivator
                     return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                 };
             }
@@ -246,7 +246,7 @@ namespace Unity.Build.Parameters
                 var elementType = element;
                 while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                // Resolver
+                // CreateActivator
                 return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
             };
         }
@@ -275,7 +275,7 @@ namespace Unity.Build.Parameters
                 // ...
                 // SomeClass(DepClass<int, string> c) 
 
-                // Factory            // Resolver  
+                // Factory            // CreateActivator  
                 return type => (ref ResolutionContext context) =>
                     context.Resolve(parameter.ParameterType, attribute?.Name);
             }
@@ -318,7 +318,7 @@ namespace Unity.Build.Parameters
                             ? info.MakeGenericType(types)
                             : info.GetGenericTypeDefinition().MakeGenericType(types);
 
-                // Resolver
+                // CreateActivator
                 return (ref ResolutionContext context) => context.Resolve(newType, attribute?.Name);
             };
         }
