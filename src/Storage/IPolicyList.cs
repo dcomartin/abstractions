@@ -1,6 +1,7 @@
 using System;
+using Unity.Policy;
 
-namespace Unity.Policy
+namespace Unity.Storage
 {
     /// <summary>
     /// A custom collection over <see cref="IBuilderPolicy"/> objects.

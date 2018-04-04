@@ -6,6 +6,7 @@ using Unity.Build.Pipeline;
 using Unity.Builder;
 using Unity.Builder.Policy;
 using Unity.Policy;
+using Unity.Storage;
 using Unity.Utility;
 
 namespace Unity.Registration

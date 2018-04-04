@@ -6,6 +6,7 @@ using System.Reflection;
 using Unity.Build.Selected;
 using Unity.Policy;
 using Unity.Registration;
+using Unity.Storage;
 
 namespace Unity.Builder.Policy
 {
