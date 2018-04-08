@@ -45,7 +45,7 @@ namespace Unity.Build.Parameters
 
                 _info = value ?? throw new InvalidOperationException("Member Info can not be null");
 
-                CreateActivator = CreateResolverFactory();
+                Activator = CreateResolverFactory();
             }
         }
 
@@ -130,7 +130,7 @@ namespace Unity.Build.Parameters
 
         #region Implementation
 
-        protected virtual PipelineFactory<Type, ResolveMethod> CreateResolverFactory()
+        protected virtual Factory<Type, ResolveMethod> CreateResolverFactory()
         {
             var parameters = _info.GetParameters();
             var length = parameters.Length;
@@ -139,7 +139,7 @@ namespace Unity.Build.Parameters
                 return type => null;
 
             // Create resolve factories
-            var factories = new PipelineFactory<Type, ResolveMethod>[length];
+            var factories = new Factory<Type, ResolveMethod>[length];
 
 
             if (null == _data || 0 == _data.Length)

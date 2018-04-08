@@ -33,7 +33,7 @@ namespace Unity.Build.Selected
         public MethodInfo Method => MemberInfo;
 
 
-        public override PipelineFactory<Type, ResolveMethod> ResolveMethodFactory => (type) =>
+        public override Factory<Type, ResolveMethod> ResolveMethodFactory => (type) =>
         {
             // TODO: Fix
             throw new NotImplementedException();

@@ -10,7 +10,7 @@ namespace Unity.Storage
     /// <typeparam name="TStageEnum">The stage enum</typeparam>
     /// <typeparam name="TPipeline">Type of pipeline to build</typeparam>
     public interface IStagedFactoryChain<TPipeline, in TStageEnum> :
-                     IEnumerable<PipelineFactory<TPipeline, TPipeline>> 
+                     IEnumerable<Factory<TPipeline, TPipeline>> 
     {
         /// <summary>
         /// Signals that chain has been changed
@@ -22,14 +22,14 @@ namespace Unity.Storage
         /// </summary>
         /// <param name="factory">The factory to add to the chain.</param>
         /// <param name="stage">The stage to add the strategy.</param>
-        void Add(PipelineFactory<TPipeline, TPipeline> factory, TStageEnum stage);
+        void Add(Factory<TPipeline, TPipeline> factory, TStageEnum stage);
 
         /// <summary>
         /// Removes the first occurrence of a specific object from the chain
         /// </summary>
         /// <param name="item">Factory to remove</param>
         /// <returns></returns>
-        bool Remove(PipelineFactory<TPipeline, TPipeline> item);
+        bool Remove(Factory<TPipeline, TPipeline> item);
 
         /// <summary>
         /// Builds the chain into pipeline

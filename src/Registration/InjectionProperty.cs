@@ -86,7 +86,7 @@ namespace Unity.Registration
 
         #region IInjectionProperty
 
-        public PipelineFactory<Type, ResolveMethod> ResolveMethodFactory => throw new NotImplementedException();
+        public Factory<Type, ResolveMethod> ResolveMethodFactory => throw new NotImplementedException();
 
         #endregion
 

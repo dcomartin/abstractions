@@ -22,7 +22,7 @@ namespace Unity.Builder.Selected
             //}
             //else
             //{
-            //    var factories = new PipelineFactory<Type, ResolveMethod>[length];
+            //    var factories = new Factory<Type, ResolveMethod>[length];
 
             //    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
 
@@ -51,7 +51,7 @@ namespace Unity.Builder.Selected
             //}
             //else
             //{
-            //    var factories = new PipelineFactory<Type, ResolveMethod>[length];
+            //    var factories = new Factory<Type, ResolveMethod>[length];
 
             //    if (null == members || 0 == members.Length)
             //        for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
@@ -81,7 +81,7 @@ namespace Unity.Builder.Selected
 
         #region Factory
 
-        public virtual PipelineFactory<Type, ResolveMethod> ResolveMethodFactory { get; }
+        public virtual Factory<Type, ResolveMethod> ResolveMethodFactory { get; }
 
         #endregion
     }

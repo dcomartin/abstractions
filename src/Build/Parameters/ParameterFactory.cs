@@ -10,7 +10,7 @@ namespace Unity.Build.Parameters
     public static class ParameterFactory
     {
 
-        public static PipelineFactory<Type, ResolveMethod> ToFactory__(this ParameterInfo parameter, object arg)
+        public static Factory<Type, ResolveMethod> ToFactory__(this ParameterInfo parameter, object arg)
         {
             switch (arg)
             {
@@ -40,8 +40,8 @@ namespace Unity.Build.Parameters
                         return t => (ref ResolutionContext context) => type;
 
 
-                case IPipelineFactory<ParameterInfo> factory:
-                    var pipeline = factory.CreateActivator(parameter);
+                case ITypeFactory<ParameterInfo> factory:
+                    var pipeline = factory.Activator(parameter);
                     return runtime => pipeline;
 
                 default:
@@ -49,7 +49,7 @@ namespace Unity.Build.Parameters
             }
         }
 
-        public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter, object arg)
+        public static Factory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter, object arg)
         {
             var attribute = (DependencyResolutionAttribute)parameter.GetCustomAttribute(typeof(DependencyResolutionAttribute));
             var info = parameter.ParameterType.GetTypeInfo();
@@ -62,7 +62,7 @@ namespace Unity.Build.Parameters
             {
                 // Simple type
 
-                // Factory            // CreateActivator
+                // Factory            // Activator
                 return type => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
@@ -75,7 +75,7 @@ namespace Unity.Build.Parameters
 
             var index = info.GenericParameterPosition;
 
-            // Factory            // CreateActivator
+            // Factory            // Activator
             return type => (ref ResolutionContext context) =>
                 context.Resolve(type.GetTypeInfo().GenericTypeArguments[index], attribute?.Name);
         }
@@ -85,7 +85,7 @@ namespace Unity.Build.Parameters
         /// </summary>
         /// <param name="parameter">Parameter info to process</param>
         /// <returns>Pipeline factory method</returns>
-        public static PipelineFactory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter)
+        public static Factory<Type, ResolveMethod> ToFactory(this ParameterInfo parameter)
         {
             var attribute = (DependencyResolutionAttribute)parameter.GetCustomAttribute(typeof(DependencyResolutionAttribute));
             var info = parameter.ParameterType.GetTypeInfo();
@@ -98,7 +98,7 @@ namespace Unity.Build.Parameters
             {
                 // Simple type
 
-                // Factory            // CreateActivator
+                // Factory            // Activator
                 return type => (ref ResolutionContext context) => context.Resolve(parameter.ParameterType, attribute?.Name);
             }
 
@@ -111,7 +111,7 @@ namespace Unity.Build.Parameters
 
             var index = info.GenericParameterPosition;
 
-            // Factory            // CreateActivator
+            // Factory            // Activator
             return type => (ref ResolutionContext context) =>
                 context.Resolve(type.GetTypeInfo().GenericTypeArguments[index], attribute?.Name);
         }
@@ -132,7 +132,7 @@ namespace Unity.Build.Parameters
         /// <param name="info"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        private static PipelineFactory<Type, ResolveMethod> ArrayToFactory(this ParameterInfo parameter, 
+        private static Factory<Type, ResolveMethod> ArrayToFactory(this ParameterInfo parameter, 
                                                                                 TypeInfo info,
                                                                                 DependencyResolutionAttribute attribute)
         {
@@ -170,7 +170,7 @@ namespace Unity.Build.Parameters
                                           throw new InvalidOperationException();
                         }
 
-                        // CreateActivator
+                        // Activator
                         return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                     };
                 }
@@ -214,7 +214,7 @@ namespace Unity.Build.Parameters
 
                     while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                    // CreateActivator
+                    // Activator
                     return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                 };
             }
@@ -235,7 +235,7 @@ namespace Unity.Build.Parameters
                     var elementType = type.GetTypeInfo().GenericTypeArguments[position];
                     while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                    // CreateActivator
+                    // Activator
                     return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
                 };
             }
@@ -246,7 +246,7 @@ namespace Unity.Build.Parameters
                 var elementType = element;
                 while (0 < depth--) elementType = elementType.MakeArrayType();
 
-                // CreateActivator
+                // Activator
                 return (ref ResolutionContext context) => context.Resolve(elementType, attribute?.Name);
             };
         }
@@ -265,7 +265,7 @@ namespace Unity.Build.Parameters
         ///  <param name="info"></param>
         /// <param name="attribute"></param>
         ///  <returns></returns>
-        private static PipelineFactory<Type, ResolveMethod> GenericToFactorry(this ParameterInfo parameter,
+        private static Factory<Type, ResolveMethod> GenericToFactorry(this ParameterInfo parameter,
                                                                                    TypeInfo info,
                                                                                    DependencyResolutionAttribute attribute)
         {
@@ -275,7 +275,7 @@ namespace Unity.Build.Parameters
                 // ...
                 // SomeClass(DepClass<int, string> c) 
 
-                // Factory            // CreateActivator  
+                // Factory            // Activator  
                 return type => (ref ResolutionContext context) =>
                     context.Resolve(parameter.ParameterType, attribute?.Name);
             }
@@ -318,7 +318,7 @@ namespace Unity.Build.Parameters
                             ? info.MakeGenericType(types)
                             : info.GetGenericTypeDefinition().MakeGenericType(types);
 
-                // CreateActivator
+                // Activator
                 return (ref ResolutionContext context) => context.Resolve(newType, attribute?.Name);
             };
         }

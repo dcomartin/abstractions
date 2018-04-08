@@ -78,7 +78,7 @@ namespace Unity.Registration
 
         public ConstructorInfo Constructor => MemberInfo;
 
-        protected override PipelineFactory<Type, ResolveMethod> CreateResolverFactory()
+        protected override Factory<Type, ResolveMethod> CreateResolverFactory()
         {
             var dependencies = base.CreateResolverFactory();
             if (MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
