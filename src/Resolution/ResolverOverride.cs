@@ -7,7 +7,7 @@ namespace Unity.Resolution
 {
     /// <summary>
     /// Base class for all override objects passed in the
-    /// <see cref="IUnityContainer.Resolve"/> method.
+    /// <see cref="IUnityContainer.Resolve"/> pipeline.
     /// </summary>
     public abstract class ResolverOverride
     {

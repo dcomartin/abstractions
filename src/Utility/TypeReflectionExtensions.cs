@@ -130,7 +130,7 @@ namespace Unity.Utility
         /// <summary>
         /// Given a generic argument name, return the corresponding type for this
         /// closed type. For example, if the current type is SomeType&lt;User&gt;, and the
-        /// corresponding definition was SomeType&lt;TSomething&gt;, calling this method
+        /// corresponding definition was SomeType&lt;TSomething&gt;, calling this pipeline
         /// and passing "TSomething" will return typeof(User).
         /// </summary>
         /// <param name="type"></param>

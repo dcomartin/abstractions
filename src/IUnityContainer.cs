@@ -23,7 +23,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects. Can be null.</param>
-        /// <returns>The <see cref="IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         IUnityContainer RegisterType(Type registeredType, string name, Type mappedTo, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers);
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace Unity
         /// <param name="name">Name for registration.</param>
         /// <param name="lifetime">
         /// <see cref="LifetimeManager"/> object that controls how this instance will be managed by the container.</param>
-        /// <returns>The <see cref="IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         IUnityContainer RegisterInstance(Type type, string name, object instance, LifetimeManager lifetime);
 
         /// <summary>
-        /// ResolveMethod an instance of the requested type with the given name registeredType the container.
+        /// ResolvePipeline an instance of the requested type with the given name registeredType the container.
         /// </summary>
         /// <param name="type"><see cref="Type"/> of object to get registeredType the container.</param>
         /// <param name="name">Name of the object to retrieve.</param>
@@ -57,14 +57,14 @@ namespace Unity
         /// Add an extension object to the container.
         /// </summary>
         /// <param name="extension"><see cref="UnityContainerExtension"/> to add.</param>
-        /// <returns>The <see cref="IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         IUnityContainer AddExtension(UnityContainerExtension extension);
 
         /// <summary>
-        /// ResolveMethod access to a configuration interface exposed by an extension.
+        /// ResolvePipeline access to a configuration interface exposed by an extension.
         /// </summary>
         /// <remarks>Extensions can expose configuration interfaces as well as adding
-        /// strategies and policies to the container. This method walks the list of
+        /// strategies and policies to the container. This pipeline walks the list of
         /// added extensions and returns the first one that implements the requested type.
         /// </remarks>
         /// <param name="configurationInterface"><see cref="Type"/> of configuration interface required.</param>

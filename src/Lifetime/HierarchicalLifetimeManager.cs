@@ -26,7 +26,7 @@ namespace Unity.Lifetime
         /// </summary>
         /// <param name="container">Container that owns the value</param>
         /// <returns>the object desired, or null if no such object is currently stored.</returns>
-        /// <remarks>This method is invoked by <see cref="SynchronizedLifetimeManager.GetValue"/>
+        /// <remarks>This pipeline is invoked by <see cref="SynchronizedLifetimeManager.GetValue"/>
         /// after it has acquired its lock.</remarks>
         protected override object SynchronizedGetValue(ILifetimeContainer container = null)
         {
@@ -39,7 +39,7 @@ namespace Unity.Lifetime
         /// </summary>
         /// <param name="newValue">The object being stored.</param>
         /// <param name="container">Container that owns the value</param>
-        /// <remarks>This method is invoked by <see cref="SynchronizedLifetimeManager.SetValue"/>
+        /// <remarks>This pipeline is invoked by <see cref="SynchronizedLifetimeManager.SetValue"/>
         /// before releasing its lock.</remarks>
         protected override void SynchronizedSetValue(object newValue, ILifetimeContainer container = null)
         {

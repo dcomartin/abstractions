@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Unity.Build.Context;
 using Unity.Build.Parameters;
+using Unity.Container;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable RedundantExplicitArrayCreation
@@ -43,7 +43,7 @@ namespace Unity.Abstractions.Tests.Build.Parameters
         public void Abstractions_Build_Parameters_ParameterFactory_Type_Name(int test, ParameterInfo parameter, Type resolveType, Type expectedType, string expectedName)
         {
             // Setup
-            ResolutionContext context = new ResolutionContext
+            ResolveContext context = new ResolveContext
             {
                 Resolve = (Type t, string n) => new Tuple<Type, string>(t, n)
             };

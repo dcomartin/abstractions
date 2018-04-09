@@ -335,7 +335,7 @@ namespace System.Collections.Concurrent
         /// <see cref="ConcurrentDictionary{TKey, TValue}"/>.
         /// </summary>
         /// <param name="key">The key of the element to remove and return.</param>
-        /// <param name="value">When this method returns, <paramref name="value"/> contains the object removed from the
+        /// <param name="value">When this pipeline returns, <paramref name="value"/> contains the object removed from the
         /// <see cref="ConcurrentDictionary{TKey,TValue}"/> or the default value of <typeparamref
         /// name="TValue"/>
         /// if the operation failed.</param>
@@ -423,7 +423,7 @@ namespace System.Collections.Concurrent
         /// cref="ConcurrentDictionary{TKey,TValue}"/>.
         /// </summary>
         /// <param name="key">The key of the value to get.</param>
-        /// <param name="value">When this method returns, <paramref name="value"/> contains the object from
+        /// <param name="value">When this pipeline returns, <paramref name="value"/> contains the object from
         /// the
         /// <see cref="ConcurrentDictionary{TKey,TValue}"/> with the specified key or the default value of
         /// <typeparamref name="TValue"/>, if the operation failed.</param>
@@ -1118,7 +1118,7 @@ namespace System.Collections.Concurrent
         /// cref="T:System.Collections.Generic.IDictionary{TKey,TValue}"/>.
         /// </summary>
         /// <param name="key">The key of the element to remove.</param>
-        /// <returns>true if the element is successfully remove; otherwise false. This method also returns
+        /// <returns>true if the element is successfully remove; otherwise false. This pipeline also returns
         /// false if
         /// <paramref name="key"/> was not found in the original <see
         /// cref="T:System.Collections.Generic.IDictionary{TKey,TValue}"/>.
@@ -1566,7 +1566,7 @@ namespace System.Collections.Concurrent
 
                 if (regenerateHashKeys && rehashCount == _keyRehashCount)
                 {
-                    // This method is called with regenerateHashKeys==true when we detected 
+                    // This pipeline is called with regenerateHashKeys==true when we detected 
                     // more than HashHelpers.HashCollisionThreshold collisions when adding a new element.
                     // In that case we are in the process of switching to another (randomized) comparer
                     // and we have to re-hash all the keys in the table.
@@ -1859,7 +1859,7 @@ namespace System.Collections.Concurrent
         }
 
         /// <summary>
-        /// A helper method for asserts.
+        /// A helper pipeline for asserts.
         /// </summary>
         [Conditional("DEBUG")]
         private void Assert(bool condition)

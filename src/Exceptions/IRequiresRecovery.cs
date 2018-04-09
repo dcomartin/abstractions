@@ -14,7 +14,7 @@ namespace Unity.Exceptions
     public interface IRequiresRecovery
     {
         /// <summary>
-        /// A method that does whatever is needed to clean up
+        /// A pipeline that does whatever is needed to clean up
         /// as part of cleaning up after an exception.
         /// </summary>
         /// <remarks>

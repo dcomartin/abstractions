@@ -17,7 +17,7 @@ namespace Unity.Builder.Operation
         /// Initializes a new instance of the <see cref="ConstructorArgumentResolveOperation"/> class.
         /// </summary>
         /// <param name="typeBeingConstructed">The type that is being constructed.</param>
-        /// <param name="methodSignature">A string representing the method being called.</param>
+        /// <param name="methodSignature">A string representing the pipeline being called.</param>
         /// <param name="parameterName">Parameter being resolved.</param>
         public MethodArgumentResolveOperation(Type typeBeingConstructed, string methodSignature, string parameterName)
             : base(typeBeingConstructed, parameterName)
@@ -37,7 +37,7 @@ namespace Unity.Builder.Operation
         }
 
         /// <summary>
-        /// String describing the method being set up.
+        /// String describing the pipeline being set up.
         /// </summary>
         public string MethodSignature { get; }
     }

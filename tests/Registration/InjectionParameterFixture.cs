@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Unity.Build.Parameters;
 using Unity.Registration;
+using Unity.Storage;
 
 namespace Unity.Abstractions.Tests.Registration
 {
@@ -86,6 +87,10 @@ namespace Unity.Abstractions.Tests.Registration
 
             public bool Match(object obj, Type type) => Matches(obj, type);
 
+            public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet set)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion

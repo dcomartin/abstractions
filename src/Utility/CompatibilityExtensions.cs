@@ -73,10 +73,10 @@ namespace System.Reflection
 
         public virtual IEnumerable<MethodInfo> GetDeclaredMethods(String name)
         {
-            foreach (MethodInfo method in _type.GetMethods(DeclaredOnlyLookup))
+            foreach (MethodInfo pipeline in _type.GetMethods(DeclaredOnlyLookup))
             {
-                if (method.Name == name)
-                    yield return method;
+                if (pipeline.Name == name)
+                    yield return pipeline;
             }
         }
 
@@ -85,7 +85,7 @@ namespace System.Reflection
             var nt = _type.GetNestedType(name, DeclaredOnlyLookup);
             if (nt == null)
             {
-                return null; //the extension method GetTypeInfo throws for null
+                return null; //the extension pipeline GetTypeInfo throws for null
             }
             else
             {
@@ -232,19 +232,19 @@ namespace System.Reflection
             return new TypeInfo(type);
         }
 
-        public static Delegate CreateDelegate(this MethodInfo method, Type delegateType)
+        public static Delegate CreateDelegate(this MethodInfo pipeline, Type delegateType)
         {
-            return Delegate.CreateDelegate(delegateType, method);
+            return Delegate.CreateDelegate(delegateType, pipeline);
         }
 
-        public static Delegate CreateDelegate(this MethodInfo method, Type delegateType, object target)
+        public static Delegate CreateDelegate(this MethodInfo pipeline, Type delegateType, object target)
         {
-            return Delegate.CreateDelegate(delegateType, target, method);
+            return Delegate.CreateDelegate(delegateType, target, pipeline);
         }
         
-        public static MethodInfo GetMethodInfo(this Delegate method)
+        public static MethodInfo GetMethodInfo(this Delegate pipeline)
         {
-            return method.Method;
+            return pipeline.Method;
         }
 #else
         public static MethodInfo GetGetMethod(this PropertyInfo info, bool _)

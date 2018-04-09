@@ -13,7 +13,7 @@ namespace Unity.Extension
         private ExtensionContext _context;
 
         /// <summary>
-        /// The container calls this method when the extension is added.
+        /// The container calls this pipeline when the extension is added.
         /// </summary>
         /// <param name="context">A <see cref="ExtensionContext"/> instance that gives the
         /// extension access to the internals of the container.</param>
@@ -45,7 +45,7 @@ namespace Unity.Extension
         /// Initial the container with this extension's functionality.
         /// </summary>
         /// <remarks>
-        /// When overridden in a derived class, this method will modify the given
+        /// When overridden in a derived class, this pipeline will modify the given
         /// <see cref="ExtensionContext"/> by adding strategies, policies, etc. to
         /// install it's functions into the container.</remarks>
         protected abstract void Initialize();
@@ -55,12 +55,12 @@ namespace Unity.Extension
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is called when extensions are being removed from the container. It can be
+        /// This pipeline is called when extensions are being removed from the container. It can be
         /// used to do things like disconnect event handlers or clean up member state. You do not
         /// need to remove strategies or policies here; the container will do that automatically.
         /// </para>
         /// <para>
-        /// The default implementation of this method does nothing.</para>
+        /// The default implementation of this pipeline does nothing.</para>
         /// </remarks>
         public virtual void Remove()
         {

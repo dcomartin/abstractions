@@ -2,9 +2,8 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
-using Unity.Build.Context;
-using Unity.Build.Pipeline;
 using Unity.Build.Policy;
+using Unity.Container;
 
 namespace Unity.Registration
 {
@@ -26,8 +25,8 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = type;
-            Activator = (ParameterInfo info) => (ref ResolutionContext context) => type;
-            Expression = (ParameterInfo info) => throw new NotImplementedException();
+            CreatePipeline = (ParameterInfo info) => (ref ResolveContext context) => type;
+            CreateExpression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -40,8 +39,8 @@ namespace Unity.Registration
         {
             ParameterValue = value;
             ParameterType = value is Type ? typeof(Type) : value?.GetType();
-            Activator = (ParameterInfo info) => (ref ResolutionContext context) => value;
-            Expression = (ParameterInfo info) => throw new NotImplementedException();
+            CreatePipeline = (ParameterInfo info) => (ref ResolveContext context) => value;
+            CreateExpression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -54,8 +53,8 @@ namespace Unity.Registration
         {
             ParameterType = type ?? throw new ArgumentNullException(nameof(type));
             ParameterValue = value ?? throw new ArgumentNullException(nameof(value));
-            Activator = (ParameterInfo info) => (ref ResolutionContext context) => value;
-            Expression = (ParameterInfo info) => throw new NotImplementedException();
+            CreatePipeline = (ParameterInfo info) => (ref ResolveContext context) => value;
+            CreateExpression = (ParameterInfo info) => throw new NotImplementedException();
         }
 
         #endregion
@@ -78,9 +77,9 @@ namespace Unity.Registration
 
         #region ITypeFactory
 
-        public Factory<ParameterInfo, ResolveMethod> Activator { get; }
+        public Factory<ParameterInfo, ResolvePipeline> CreatePipeline { get; }
 
-        public Factory<ParameterInfo, Expression> Expression { get; }
+        public Factory<ParameterInfo, Expression> CreateExpression { get; }
 
         #endregion
 

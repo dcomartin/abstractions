@@ -43,6 +43,10 @@
     <EmbeddedResource Remove="Builder\Selection\**" />
     <None Remove="Builder\Selection\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pipeline\" />
+  </ItemGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

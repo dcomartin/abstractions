@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Unity.Build.Pipeline;
 using Unity.Build.Policy;
+using Unity.Container;
 using Unity.Storage;
 
 namespace Unity.Registration
@@ -10,7 +10,7 @@ namespace Unity.Registration
     /// Base class for objects that can be used to configure what
     /// class members get injected by the container.
     /// </summary>
-    public abstract class InjectionMember : ITypeFactory<Type>
+    public abstract class InjectionMember : ITypeFactory<Type>, IResolvePipeline
     {
         /// <summary>
         /// Allows injection member to inject necessary policies into registration
@@ -21,21 +21,29 @@ namespace Unity.Registration
         /// <param name="set">Set where policies are kept</param>
         public virtual void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet set)
         {
-            set.Set(GetType(), this);
+            if (null != CreateExpression)  set.Set(typeof(Factory<Type, Expression>), CreateExpression);
+            if (null != ResolveExpression) set.Set(typeof(Expression),                ResolveExpression);
+
+            if (null != CreatePipeline)    set.Set(typeof(Factory<Type, ResolvePipeline>), CreatePipeline);
+            if (null != ResolvePipeline)   set.Set(typeof(ResolvePipeline),                ResolvePipeline);
         }
 
 
         #region ITypeFactory
 
-        // TODO: Perhaps replace it with abstract?
+        public Factory<Type, ResolvePipeline> CreatePipeline { get; protected set; }
 
-        // Create protectively
-        public Factory<Type, ResolveMethod> Activator { get; protected set; } = type => throw new NotImplementedException(nameof(Activator));   
-
-        // Create lazy
-        public Factory<Type, Expression> Expression { get; protected set; } = type => throw new NotImplementedException(nameof(Expression));
+        public Factory<Type, Expression> CreateExpression { get; protected set; }
 
         #endregion
 
+
+        #region IResolvePipeline
+
+        public ResolvePipeline ResolvePipeline { get; protected set; }
+
+        public Expression    ResolveExpression { get; protected set; }
+
+        #endregion
     }
 }

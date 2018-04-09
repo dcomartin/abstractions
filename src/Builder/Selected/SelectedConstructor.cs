@@ -2,9 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Unity.Build.Context;
-using Unity.Build.Pipeline;
 using Unity.Builder.Selected;
+using Unity.Container;
 
 namespace Unity.Build.Selected
 {
@@ -41,14 +40,14 @@ namespace Unity.Build.Selected
         public ConstructorInfo Constructor => MemberInfo;
 
 
-        public override Factory<Type, ResolveMethod> ResolveMethodFactory => (Type type) => 
+        public override Factory<Type, ResolvePipeline> ResolveMethodFactory => (Type type) => 
         {
             var pipeline = base.ResolveMethodFactory(type);
 
             if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
             {
                 var constructorInfo = MemberInfo;
-                return (ref ResolutionContext context) => constructorInfo.Invoke((object[])pipeline(ref context));
+                return (ref ResolveContext context) => constructorInfo.Invoke((object[])pipeline(ref context));
             }
 
             Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
@@ -62,7 +61,7 @@ namespace Unity.Build.Selected
             }
 
             var ctor = type.GetTypeInfo().DeclaredConstructors.ElementAt(index);
-            return (ref ResolutionContext context) => ctor.Invoke((object[])pipeline(ref context));
+            return (ref ResolveContext context) => ctor.Invoke((object[])pipeline(ref context));
         };
     }
 }

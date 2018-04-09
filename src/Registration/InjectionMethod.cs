@@ -1,11 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Unity.Build.Parameters;
+using Unity.Storage;
 
 namespace Unity.Registration
 {
     /// <summary>
     /// An <see cref="InjectionMember"/> that configures the
-    /// container to call a method as part of buildup.
+    /// container to call a pipeline as part of buildup.
     /// </summary>
     public class InjectionMethod : InjectionMemberWithParameters<MethodInfo>
     {
@@ -49,5 +51,10 @@ namespace Unity.Registration
         public MethodInfo Method => MemberInfo;
 
         #endregion
+
+        public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet set)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

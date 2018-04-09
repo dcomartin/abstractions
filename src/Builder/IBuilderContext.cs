@@ -124,11 +124,11 @@ namespace Unity.Builder
         /// or null if that @delegate hasn't been overridden.
         /// </summary>
         /// <param name="dependencyType">Type of the @delegate.</param>
-        /// <returns>Activator to use, or null if no override matches for the current operation.</returns>
+        /// <returns>CreatePipeline to use, or null if no override matches for the current operation.</returns>
         IResolverPolicy GetOverriddenResolver(Type dependencyType);
 
         /// <summary>
-        /// A method to do a new buildup operation on an existing context.
+        /// A pipeline to do a new buildup operation on an existing context.
         /// </summary>
         /// <param name="type">Type of to build</param>
         /// <param name="name">Name of the type to build</param>
@@ -159,7 +159,7 @@ namespace Unity.Builder
 
 
         /// <summary>
-        /// A helper method used by the generated IL to set up a PerResolveLifetimeManager lifetime manager
+        /// A helper pipeline used by the generated IL to set up a PerResolveLifetimeManager lifetime manager
         /// if the current object is such.
         /// </summary>
         /// <param name="context">Current build context.</param>
@@ -193,7 +193,7 @@ namespace Unity.Builder
         /// give value. This value will be returned by <see cref="LifetimeManager.GetValue"/>
         /// but is not stored in the lifetime manager, nor is the value disposed.
         /// This Lifetime manager is intended only for internal use, which is why the
-        /// normal <see cref="LifetimeManager.SetValue"/> method is not used here.
+        /// normal <see cref="LifetimeManager.SetValue"/> pipeline is not used here.
         /// </summary>
         /// <param name="value">Value to store.</param>
         public InternalPerResolveLifetimeManager(object value)

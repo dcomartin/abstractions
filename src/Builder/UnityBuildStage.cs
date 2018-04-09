@@ -41,7 +41,7 @@ namespace Unity.Builder
         Creation,
 
         /// <summary>
-        /// Sixth stage. Property sets and method injection happens here.
+        /// Sixth stage. Property sets and pipeline injection happens here.
         /// </summary>
         Initialization,
 

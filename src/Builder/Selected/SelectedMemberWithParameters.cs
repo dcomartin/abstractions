@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Unity.Build.Pipeline;
+using Unity.Container;
 
 namespace Unity.Builder.Selected
 {
@@ -18,20 +18,20 @@ namespace Unity.Builder.Selected
             //if (0 == length)
             //{
             //    var array = new object[0];
-            //    ResolveMethodFactory = type => (ref ResolutionContext context) => array;
+            //    ResolveMethodFactory = type => (ref ResolveContext context) => array;
             //}
             //else
             //{
-            //    var factories = new Factory<Type, ResolveMethod>[length];
+            //    var factories = new Factory<Type, ResolvePipeline>[length];
 
             //    for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
 
             //    ResolveMethodFactory = type =>
             //    {
-            //        var resolvers = new ResolveMethod[length];
+            //        var resolvers = new ResolvePipeline[length];
             //        for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
 
-            //        return (ref ResolutionContext context) =>
+            //        return (ref ResolveContext context) =>
             //        {
             //            var values = new object[length];
             //            for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
@@ -47,11 +47,11 @@ namespace Unity.Builder.Selected
             //if (0 == length)
             //{
             //    var array = new object[0];
-            //    ResolveMethodFactory = type => (ref ResolutionContext context) => array;
+            //    ResolveMethodFactory = type => (ref ResolveContext context) => array;
             //}
             //else
             //{
-            //    var factories = new Factory<Type, ResolveMethod>[length];
+            //    var factories = new Factory<Type, ResolvePipeline>[length];
 
             //    if (null == members || 0 == members.Length)
             //        for (var f = 0; f < length; f++) factories[f] = parameters[f].ToFactory();
@@ -63,10 +63,10 @@ namespace Unity.Builder.Selected
 
             //    ResolveMethodFactory = type =>
             //    {
-            //        var resolvers = new ResolveMethod[length];
+            //        var resolvers = new ResolvePipeline[length];
             //        for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
 
-            //        return (ref ResolutionContext context) =>
+            //        return (ref ResolveContext context) =>
             //        {
             //            var values = new object[length];
             //            for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);
@@ -81,7 +81,7 @@ namespace Unity.Builder.Selected
 
         #region Factory
 
-        public virtual Factory<Type, ResolveMethod> ResolveMethodFactory { get; }
+        public virtual Factory<Type, ResolvePipeline> ResolveMethodFactory { get; }
 
         #endregion
     }

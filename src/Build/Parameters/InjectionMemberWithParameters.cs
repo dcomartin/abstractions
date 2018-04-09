@@ -3,8 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Unity.Build.Context;
-using Unity.Build.Pipeline;
+using Unity.Container;
 using Unity.Registration;
 
 namespace Unity.Build.Parameters
@@ -45,7 +44,7 @@ namespace Unity.Build.Parameters
 
                 _info = value ?? throw new InvalidOperationException("Member Info can not be null");
 
-                Activator = CreateResolverFactory();
+                CreatePipeline = CreateResolverFactory();
             }
         }
 
@@ -130,7 +129,7 @@ namespace Unity.Build.Parameters
 
         #region Implementation
 
-        protected virtual Factory<Type, ResolveMethod> CreateResolverFactory()
+        protected virtual Factory<Type, ResolvePipeline> CreateResolverFactory()
         {
             var parameters = _info.GetParameters();
             var length = parameters.Length;
@@ -139,7 +138,7 @@ namespace Unity.Build.Parameters
                 return type => null;
 
             // Create resolve factories
-            var factories = new Factory<Type, ResolveMethod>[length];
+            var factories = new Factory<Type, ResolvePipeline>[length];
 
 
             if (null == _data || 0 == _data.Length)
@@ -152,10 +151,10 @@ namespace Unity.Build.Parameters
 
             return type =>
             {
-                var resolvers = new ResolveMethod[length];
+                var resolvers = new ResolvePipeline[length];
                 for (var p = 0; p < length; p++) resolvers[p] = factories[p](type);
 
-                return (ref ResolutionContext context) =>
+                return (ref ResolveContext context) =>
                 {
                     var values = new object[length];
                     for (var v = 0; v < length; v++) values[v] = resolvers[v](ref context);

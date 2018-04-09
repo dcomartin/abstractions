@@ -25,7 +25,7 @@ namespace Unity.Builder
 
         /// <summary>
         /// Strategies in this stage work on created objects. Typical work done in this stage might
-        /// include setter injection and method calls.
+        /// include setter injection and pipeline calls.
         /// </summary>
         Initialization,
 

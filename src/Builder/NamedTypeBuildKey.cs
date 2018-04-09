@@ -37,7 +37,7 @@ namespace Unity.Builder
         }
 
         /// <summary>
-        /// This helper method creates a new <see cref="NamedTypeBuildKey"/> instance. It is
+        /// This helper pipeline creates a new <see cref="NamedTypeBuildKey"/> instance. It is
         /// initialized for the default key for the given type.
         /// </summary>
         /// <typeparam name="T">Type to build.</typeparam>
@@ -48,7 +48,7 @@ namespace Unity.Builder
         }
 
         /// <summary>
-        /// This helper method creates a new <see cref="NamedTypeBuildKey"/> instance for
+        /// This helper pipeline creates a new <see cref="NamedTypeBuildKey"/> instance for
         /// the given type and key.
         /// </summary>
         /// <typeparam name="T">Type to build</typeparam>

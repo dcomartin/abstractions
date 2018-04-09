@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Unity.Build.Pipeline
+namespace Unity.Container
 {
     public delegate TPipeline Factory<in TData, out TPipeline>(TData data);
-
 
     public static class FactoryExtensions
     {

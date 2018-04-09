@@ -21,7 +21,7 @@ namespace Unity.Builder.Operation
 
         /// <summary>
         /// GetOrDefault a format string used to create the description. Called by
-        /// the base <see cref='PropertyOperation.ToString'/> method.
+        /// the base <see cref='PropertyOperation.ToString'/> pipeline.
         /// </summary>
         /// <returns>The format string.</returns>
         protected override string GetDescriptionFormat()

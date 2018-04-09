@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using Unity.Build.Context;
-using Unity.Build.Pipeline;
 using Unity.Builder.Selected;
+using Unity.Container;
 
 namespace Unity.Build.Selected
 {
@@ -18,9 +15,9 @@ namespace Unity.Build.Selected
     {
         /// <summary>
         /// Create a new <see cref="SelectedMethod"/> instance which
-        /// contains the given method.
+        /// contains the given pipeline.
         /// </summary>
-        /// <param name="method">The method</param>
+        /// <param name="method">The pipeline</param>
         public SelectedMethod(MethodInfo method)
             : base(method, method.GetParameters())             
         {
@@ -33,7 +30,7 @@ namespace Unity.Build.Selected
         public MethodInfo Method => MemberInfo;
 
 
-        public override Factory<Type, ResolveMethod> ResolveMethodFactory => (type) =>
+        public override Factory<Type, ResolvePipeline> ResolveMethodFactory => (type) =>
         {
             // TODO: Fix
             throw new NotImplementedException();
@@ -42,7 +39,7 @@ namespace Unity.Build.Selected
             //if (!MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
             //{
             //    var methodInfo = MemberInfo;
-            //    return (ref ResolutionContext context) => methodInfo.Invoke(context.Existing, (object[])pipeline(ref context));
+            //    return (ref ResolveContext context) => methodInfo.Invoke(context.Existing, (object[])pipeline(ref context));
             //}
 
             //Debug.Assert(MemberInfo.DeclaringType.GetTypeInfo().GetGenericTypeDefinition() == type.GetTypeInfo().GetGenericTypeDefinition());
@@ -56,8 +53,8 @@ namespace Unity.Build.Selected
             //    break;
             //}
 
-            //var method = type.GetTypeInfo().DeclaredMethods.ElementAt(index);
-            //return (ref ResolutionContext context) => method.Invoke(context.Existing, (object[])pipeline(ref context));
+            //var pipeline = type.GetTypeInfo().DeclaredMethods.ElementAt(index);
+            //return (ref ResolveContext context) => pipeline.Invoke(context.Existing, (object[])pipeline(ref context));
         };
     }
 }

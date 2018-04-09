@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Build.Pipeline;
+using Unity.Container;
 
 namespace Unity.Storage
 {
     /// <summary>
-    /// This interface defines a standard method to create multi staged pipelines.
+    /// This interface defines a standard pipeline to create multi staged pipelines.
     /// </summary>
     /// <typeparam name="TStageEnum">The stage enum</typeparam>
     /// <typeparam name="TPipeline">Type of pipeline to build</typeparam>
@@ -34,7 +34,7 @@ namespace Unity.Storage
         /// <summary>
         /// Builds the chain into pipeline
         /// </summary>
-        /// <returns>Head of the method chain</returns>
+        /// <returns>Head of the pipeline chain</returns>
         TPipeline BuildPipeline();
     }
 }

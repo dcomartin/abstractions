@@ -11,8 +11,8 @@ namespace Unity.Resolution
     public class ParameterOverrides : OverrideCollection<ParameterOverride, string, object>
     {
         /// <summary>
-        /// When implemented in derived classes, this method is called from the <see cref="OverrideCollection{TOverride,TKey,TValue}.Add"/>
-        /// method to create the actual <see cref="ResolverOverride"/> objects.
+        /// When implemented in derived classes, this pipeline is called from the <see cref="OverrideCollection{TOverride,TKey,TValue}.Add"/>
+        /// pipeline to create the actual <see cref="ResolverOverride"/> objects.
         /// </summary>
         /// <param name="key">Key value to create the resolver.</param>
         /// <param name="value">Value to store in the resolver.</param>

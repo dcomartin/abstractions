@@ -21,13 +21,13 @@ namespace Unity.Builder.Policy
             new List<Tuple<MethodInfo, IEnumerable<InjectionParameterValue>>>();
 
         /// <summary>
-        /// Add the given method and parameter collection to the list of methods
+        /// Add the given pipeline and parameter collection to the list of methods
         /// that will be returned when the selector's <see cref="IMethodSelectorPolicy.SelectMethods"/>
-        /// method is called.
+        /// pipeline is called.
         /// </summary>
         /// <param name="method">Method to call.</param>
         /// <param name="parameters">sequence of <see cref="InjectionParameterValue"/> objects
-        /// that describe how to create the method parameter values.</param>
+        /// that describe how to create the pipeline parameter values.</param>
         public void AddMethodAndParameters(MethodInfo method, IEnumerable<InjectionParameterValue> parameters)
         {
             _methods.Add(new Tuple<MethodInfo, IEnumerable<InjectionParameterValue>>(method, parameters));

@@ -38,7 +38,7 @@ namespace Unity.ResolverPolicy
         }
 
         /// <summary>
-        /// ResolveMethod the value for a @delegate.
+        /// ResolvePipeline the value for a @delegate.
         /// </summary>
         /// <param name="context">Current build context.</param>
         /// <returns>An array populated with the results of resolving the resolver policies.</returns>

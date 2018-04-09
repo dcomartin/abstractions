@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using Unity.Build.Context;
 using Unity.Build.Parameters;
-using Unity.Build.Pipeline;
 using Unity.Build.Policy;
+using Unity.Container;
 using Unity.Storage;
 
 namespace Unity.Registration
@@ -78,7 +77,7 @@ namespace Unity.Registration
 
         public ConstructorInfo Constructor => MemberInfo;
 
-        protected override Factory<Type, ResolveMethod> CreateResolverFactory()
+        protected override Factory<Type, ResolvePipeline> CreateResolverFactory()
         {
             var dependencies = base.CreateResolverFactory();
             if (MemberInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
@@ -89,7 +88,7 @@ namespace Unity.Registration
                 {
                     var resolver = dependencies?.Invoke(type);
                     var ctor = type.GetConstructors()[index];
-                    return (ref ResolutionContext context) =>
+                    return (ref ResolveContext context) =>
                     {
                         try
                         {
@@ -108,7 +107,7 @@ namespace Unity.Registration
             return type =>
                 {
                     var resolver = dependencies?.Invoke(type);
-                    return (ref ResolutionContext context) =>
+                    return (ref ResolveContext context) =>
                     {
                         try
                         {
@@ -125,5 +124,16 @@ namespace Unity.Registration
         }
 
         #endregion
+
+
+
+    }
+
+    public static class InjectionConstructorExtensions
+    {
+        public static ResolvePipeline CreateResolvePipeline(this ConstructorInfo ctor)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

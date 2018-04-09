@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Unity.Build.Pipeline;
 using Unity.Builder;
 using Unity.Builder.Policy;
+using Unity.Container;
 using Unity.Policy;
 using Unity.Storage;
 using Unity.Utility;
@@ -40,7 +40,7 @@ namespace Unity.Registration
         /// using the value supplied. This value is converted to an
         /// <see cref="InjectionParameterValue"/> object using the
         /// rules defined by the <see cref="InjectionParameterValue.ToParameters"/>
-        /// method.
+        /// pipeline.
         /// </summary>
         /// <param name="propertyName">Name of property to inject.</param>
         /// <param name="propertyValue">Value for property.</param>
@@ -86,7 +86,7 @@ namespace Unity.Registration
 
         #region IInjectionProperty
 
-        public Factory<Type, ResolveMethod> ResolveMethodFactory => throw new NotImplementedException();
+        public Factory<Type, ResolvePipeline> ResolveMethodFactory => throw new NotImplementedException();
 
         #endregion
 
@@ -178,6 +178,11 @@ namespace Unity.Registration
                 }
             }
             return string.Format(CultureInfo.CurrentCulture, format, args);
+        }
+
+        public override void AddPolicies(Type registeredType, string name, Type implementationType, IPolicySet set)
+        {
+            throw new NotImplementedException();
         }
     }
 }

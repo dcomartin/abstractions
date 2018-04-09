@@ -1,12 +1,12 @@
 ﻿using System.Linq.Expressions;
-using Unity.Build.Pipeline;
+using Unity.Container;
 
 namespace Unity.Build.Policy
 {
     public interface ITypeFactory<in TData>
     {
-        Factory<TData, ResolveMethod> Activator { get; }
+        Factory<TData, ResolvePipeline> CreatePipeline { get; }
 
-        Factory<TData, Expression> Expression { get; }
+        Factory<TData, Expression> CreateExpression { get; }
     }
 }

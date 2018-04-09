@@ -27,7 +27,7 @@ namespace Unity
         /// <typeparam name="TRegistered">Type this registration is for.</typeparam>
         /// <param name="container">Container to configure.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered>(this IUnityContainer container, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), null, null, null, injectionMembers);
@@ -42,7 +42,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered>(this IUnityContainer container, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), null, null, lifetimeManager, injectionMembers);
@@ -56,7 +56,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="name">Name that will be used to request the type.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered>(this IUnityContainer container, string name, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), name, null, null, injectionMembers);
@@ -72,7 +72,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered>(this IUnityContainer container, string name, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), name, null, lifetimeManager, injectionMembers);
@@ -83,7 +83,7 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
+        /// This pipeline is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
         /// actually return an instance of type <typeparamref name="TMappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </para>
@@ -95,7 +95,7 @@ namespace Unity
         /// <typeparam name="TMappedTo"><see cref="Type"/> that will actually be returned.</typeparam>
         /// <param name="container">Container to configure.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered, TMappedTo>(this IUnityContainer container, params InjectionMember[] injectionMembers) where TMappedTo : TRegistered
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), null, typeof(TMappedTo), null, injectionMembers);
@@ -111,7 +111,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered, TMappedTo>(this IUnityContainer container, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers) where TMappedTo : TRegistered
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), null, typeof(TMappedTo), lifetimeManager, injectionMembers);
@@ -121,7 +121,7 @@ namespace Unity
         /// Register a type mapping with the container.
         /// </summary>
         /// <remarks>
-        /// This method is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
+        /// This pipeline is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
         /// actually return an instance of type <typeparamref name="TMappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </remarks>
@@ -130,7 +130,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="name">Name of this mapping.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered, TMappedTo>(this IUnityContainer container, string name, params InjectionMember[] injectionMembers)
             where TMappedTo : TRegistered
         {
@@ -148,7 +148,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType<TRegistered, TMappedTo>(this IUnityContainer container, string name, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers) where TMappedTo : TRegistered
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), name, typeof(TMappedTo), lifetimeManager, injectionMembers);
@@ -161,7 +161,7 @@ namespace Unity
         /// <typeparam name="TRegistered">Type this registration is for.</typeparam>
         /// <param name="container">Container to configure.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton<TRegistered>(this IUnityContainer container, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), null, null, new ContainerControlledLifetimeManager(), injectionMembers);
@@ -174,7 +174,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="name">Name that will be used to request the type.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton<TRegistered>(this IUnityContainer container, string name, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), name, null, new ContainerControlledLifetimeManager(), injectionMembers);
@@ -185,7 +185,7 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
+        /// This pipeline is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
         /// actually return an instance of type <typeparamref name="TMappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </para>
@@ -197,7 +197,7 @@ namespace Unity
         /// <typeparam name="TMappedTo"><see cref="Type"/> that will actually be returned.</typeparam>
         /// <param name="container">Container to configure.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton<TRegistered, TMappedTo>(this IUnityContainer container, params InjectionMember[] injectionMembers) where TMappedTo : TRegistered
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(typeof(TRegistered), null, typeof(TMappedTo), new ContainerControlledLifetimeManager(), injectionMembers);
@@ -207,7 +207,7 @@ namespace Unity
         /// Register a type mapping as singleton.
         /// </summary>
         /// <remarks>
-        /// This method is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
+        /// This pipeline is used to tell the container that when asked for type <typeparamref name="TRegistered"/>,
         /// actually return an instance of type <typeparamref name="TMappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </remarks>
@@ -216,7 +216,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="name">Name of this mapping.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton<TRegistered, TMappedTo>(this IUnityContainer container, string name, params InjectionMember[] injectionMembers)
             where TMappedTo : TRegistered
         {
@@ -234,7 +234,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="registeredType">Type this registration is for.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, null, null, null, injectionMembers);
@@ -249,7 +249,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, null, null, lifetimeManager, injectionMembers);
@@ -263,7 +263,7 @@ namespace Unity
         /// <param name="registeredType">The <see cref="Type"/> to configure in the container.</param>
         /// <param name="name">Name to use for registration, null if a default registration.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, string name, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, name, null, null, injectionMembers);
@@ -279,7 +279,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, string name, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, name, null, lifetimeManager, injectionMembers);
@@ -290,7 +290,7 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is used to tell the container that when asked for type <paramref name="registeredType"/>,
+        /// This pipeline is used to tell the container that when asked for type <paramref name="registeredType"/>,
         /// actually return an instance of type <paramref name="mappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </para>
@@ -302,7 +302,7 @@ namespace Unity
         /// <param name="registeredType"><see cref="Type"/> that will be requested.</param>
         /// <param name="mappedTo"><see cref="Type"/> that will actually be returned.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, Type mappedTo, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, null, mappedTo, null, injectionMembers);
@@ -312,7 +312,7 @@ namespace Unity
         /// Register a type mapping with the container.
         /// </summary>
         /// <remarks>
-        /// This method is used to tell the container that when asked for type <paramref name="registeredType"/>,
+        /// This pipeline is used to tell the container that when asked for type <paramref name="registeredType"/>,
         /// actually return an instance of type <paramref name="mappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </remarks>
@@ -321,7 +321,7 @@ namespace Unity
         /// <param name="mappedTo"><see cref="Type"/> that will actually be returned.</param>
         /// <param name="name">Name to use for registration, null if a default registration.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, Type mappedTo, string name, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, name, mappedTo, null, injectionMembers);
@@ -337,7 +337,7 @@ namespace Unity
         /// <param name="lifetimeManager">The <see cref="LifetimeManager"/> that controls the lifetime
         /// of the returned instance.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterType(this IUnityContainer container, Type registeredType, Type mappedTo, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, null, mappedTo, lifetimeManager, injectionMembers);
@@ -350,7 +350,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="registeredType">Type this registration is for.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton(this IUnityContainer container, Type registeredType, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, null, null, new ContainerControlledLifetimeManager(), injectionMembers);
@@ -364,7 +364,7 @@ namespace Unity
         /// <param name="registeredType">The <see cref="Type"/> to configure in the container.</param>
         /// <param name="name">Name to use for registration, null if a default registration.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton(this IUnityContainer container, Type registeredType, string name, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, name, null, new ContainerControlledLifetimeManager(), injectionMembers);
@@ -375,7 +375,7 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is used to tell the container that when asked for type <paramref name="registeredType"/>,
+        /// This pipeline is used to tell the container that when asked for type <paramref name="registeredType"/>,
         /// actually return an instance of type <paramref name="mappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </para>
@@ -387,7 +387,7 @@ namespace Unity
         /// <param name="registeredType"><see cref="Type"/> that will be requested.</param>
         /// <param name="mappedTo"><see cref="Type"/> that will actually be returned.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton(this IUnityContainer container, Type registeredType, Type mappedTo, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, null, mappedTo, new ContainerControlledLifetimeManager(), injectionMembers);
@@ -397,7 +397,7 @@ namespace Unity
         /// Register a type mapping with the container.
         /// </summary>
         /// <remarks>
-        /// This method is used to tell the container that when asked for type <paramref name="registeredType"/>,
+        /// This pipeline is used to tell the container that when asked for type <paramref name="registeredType"/>,
         /// actually return an instance of type <paramref name="mappedTo"/>. This is very useful for
         /// getting instances of interfaces.
         /// </remarks>
@@ -406,7 +406,7 @@ namespace Unity
         /// <param name="mappedTo"><see cref="Type"/> that will actually be returned.</param>
         /// <param name="name">Name to use for registration, null if a default registration.</param>
         /// <param name="injectionMembers">Injection configuration objects.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterSingleton(this IUnityContainer container, Type registeredType, Type mappedTo, string name, params InjectionMember[] injectionMembers)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterType(registeredType, name, mappedTo, new ContainerControlledLifetimeManager(), injectionMembers);
@@ -438,7 +438,7 @@ namespace Unity
         /// <typeparam name="TInterface">Type of instance to register (may be an implemented interface instead of the full type).</typeparam>
         /// <param name="container">Container to configure.</param>
         /// <param name="instance">Object to returned.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance<TInterface>(this IUnityContainer container, TInterface instance)
         {
             return (container ?? throw new ArgumentNullException(nameof(container)))
@@ -463,7 +463,7 @@ namespace Unity
         /// <param name="instance">Object to returned.</param>
         /// <param name="lifetimeManager">
         /// <see cref="LifetimeManager"/> object that controls how this instance will be managed by the container.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance<TRegisteredType>(this IUnityContainer container, TRegisteredType instance, LifetimeManager lifetimeManager)
         {
             return (container ?? throw new ArgumentNullException(nameof(container)))
@@ -486,7 +486,7 @@ namespace Unity
         /// <param name="instance">Object to returned.</param>
         /// <param name="container">Container to configure.</param>
         /// <param name="name">Name for registration.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance<TRegisteredType>(this IUnityContainer container, string name, TRegisteredType instance)
         {
             return (container ?? throw new ArgumentNullException(nameof(container)))
@@ -509,7 +509,7 @@ namespace Unity
         /// <param name="name">Name for registration.</param>
         /// <param name="lifetimeManager">
         /// <see cref="LifetimeManager"/> object that controls how this instance will be managed by the container.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance<TRegisteredType>(this IUnityContainer container, string name, TRegisteredType instance, LifetimeManager lifetimeManager)
         {
             return (container ?? throw new ArgumentNullException(nameof(container))).RegisterInstance(typeof(TRegisteredType), name, instance, lifetimeManager);
@@ -535,7 +535,7 @@ namespace Unity
         /// <param name="container">Container to configure.</param>
         /// <param name="registeredType">Type of instance to register (may be an implemented interface instead of the full type).</param>
         /// <param name="instance">Object to returned.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance(this IUnityContainer container, Type registeredType, object instance)
         {
             return (container ?? throw new ArgumentNullException(nameof(container)))
@@ -560,7 +560,7 @@ namespace Unity
         /// <param name="instance">Object to returned.</param>
         /// <param name="lifetimeManager">
         /// <see cref="LifetimeManager"/> object that controls how this instance will be managed by the container.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance(this IUnityContainer container, Type registeredType, object instance, LifetimeManager lifetimeManager)
         {
             return (container ?? throw new ArgumentNullException(nameof(container)))
@@ -583,7 +583,7 @@ namespace Unity
         /// <param name="registeredType">Type of instance to register (may be an implemented interface instead of the full type).</param>
         /// <param name="instance">Object to returned.</param>
         /// <param name="name">Name for registration.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer RegisterInstance(this IUnityContainer container, Type registeredType, string name, object instance)
         {
             return (container ?? throw new ArgumentNullException(nameof(container)))
@@ -596,10 +596,10 @@ namespace Unity
         #endregion
 
 
-        #region ResolveMethod overloads
+        #region ResolvePipeline overloads
 
         /// <summary>
-        /// ResolveMethod an instance of the default requested type from the container.
+        /// ResolvePipeline an instance of the default requested type from the container.
         /// </summary>
         /// <typeparam name="TResolvedType"><see cref="Type"/> of object to get from the container.</typeparam>
         /// <param name="container">Container to resolve from.</param>
@@ -611,7 +611,7 @@ namespace Unity
         }
 
         /// <summary>
-        /// ResolveMethod an instance of the requested type with the given name from the container.
+        /// ResolvePipeline an instance of the requested type with the given name from the container.
         /// </summary>
         /// <typeparam name="TResolvedType"><see cref="Type"/> of object to get from the container.</typeparam>
         /// <param name="container">Container to resolve from.</param>
@@ -624,7 +624,7 @@ namespace Unity
         }
 
         /// <summary>
-        /// ResolveMethod an instance of the default requested type from the container.
+        /// ResolvePipeline an instance of the default requested type from the container.
         /// </summary>
         /// <param name="container">Container to resolve from.</param>
         /// <param name="type"><see cref="Type"/> of object to get from the container.</param>
@@ -645,11 +645,11 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is useful if you've registered multiple types with the same
+        /// This pipeline is useful if you've registered multiple types with the same
         /// <see cref="Type"/> but different names.
         /// </para>
         /// <para>
-        /// Be aware that this method does NOT return an instance for the default (unnamed) registration.
+        /// Be aware that this pipeline does NOT return an instance for the default (unnamed) registration.
         /// </para>
         /// </remarks>
         /// <param name="container">Container to resolve from.</param>
@@ -667,11 +667,11 @@ namespace Unity
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method is useful if you've registered multiple types with the same
+        /// This pipeline is useful if you've registered multiple types with the same
         /// <see cref="Type"/> but different names.
         /// </para>
         /// <para>
-        /// Be aware that this method does NOT return an instance for the default (unnamed) registration.
+        /// Be aware that this pipeline does NOT return an instance for the default (unnamed) registration.
         /// </para>
         /// </remarks>
         /// <typeparam name="TResolvedType">The type requested.</typeparam>
@@ -694,7 +694,7 @@ namespace Unity
         /// <typeparam name="TExtension">Type of <see cref="UnityContainerExtension"/> to add. The extension type
         /// will be resolved from within the supplied <paramref name="container"/>.</typeparam>
         /// <param name="container">Container to add the extension to.</param>
-        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this method was called on (this in C#, Me in Visual Basic).</returns>
+        /// <returns>The <see cref="Unity.IUnityContainer"/> object that this pipeline was called on (this in C#, Me in Visual Basic).</returns>
         public static IUnityContainer AddNewExtension<TExtension>(this IUnityContainer container)
             where TExtension : UnityContainerExtension
         {
@@ -703,10 +703,10 @@ namespace Unity
         }
 
         /// <summary>
-        /// ResolveMethod access to a configuration interface exposed by an extension.
+        /// ResolvePipeline access to a configuration interface exposed by an extension.
         /// </summary>
         /// <remarks>Extensions can expose configuration interfaces as well as adding
-        /// strategies and policies to the container. This method walks the list of
+        /// strategies and policies to the container. This pipeline walks the list of
         /// added extensions and returns the first one that implements the requested type.
         /// </remarks>
         /// <typeparam name="TConfigurator">The configuration interface required.</typeparam>
